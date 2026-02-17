@@ -1,0 +1,85 @@
+---
+title: Get Vendor Reports
+description: "Retrieve calculated line item reports for a vendor"
+api: "GET /v1/report/{vendorId}"
+---
+
+## Overview
+
+Returns a paginated list of calculated line items for a specific vendor, including sales, commissions, costs, and payouts. This is the data that appears in the vendor reports view.
+
+### Use Cases
+
+- **Generate vendor statements** for a specific date range
+- **Build custom vendor dashboards** with financial breakdowns
+- **Export report data** to CSV/Excel for accounting
+- **Reconcile vendor earnings** against payment records
+- **Feed data into a BI tool** for margin and performance analysis
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's unique ID.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="start" type="string">
+  Start date in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField query="end" type="string">
+  End date in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField query="limit" type="number">
+  Results per page. Default: `100`.
+</ParamField>
+
+<ParamField query="offset" type="number">
+  Number of results to skip. Default: `0`.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "total": 156,
+  "nextOffset": 100,
+  "orders": [
+    {
+      "_id": "...",
+      "orderNumber": 1042,
+      "orderName": "#1042",
+      "orderId": 5022136860720,
+      "orderDate": "2024-03-15T00:00:00.000Z",
+      "vendorName": "acme supplies",
+      "vendorId": "6157faecbebcf01bf49097d9",
+      "title": "Classic T-Shirt",
+      "variant": "Large / Blue",
+      "sku": "TSH-LG-BLU",
+      "unitPrice": 29.99,
+      "quantity": 2,
+      "discount": 0,
+      "sales": 59.98,
+      "salesAfterDiscount": 59.98,
+      "tax": 10.00,
+      "costOfItem": 31.00,
+      "commissionPlan": "14%",
+      "commission": 8.40,
+      "deduction": 0,
+      "payout": 41.58,
+      "createdAt": "2024-03-15T08:30:00.000Z",
+      "updatedAt": "2024-03-15T08:30:00.000Z"
+    }
+  ]
+}
+```
+
+## Example
+
+```bash
+# Vendor report for March 2024
+curl -X GET "https://api.puppetvendors.com/v1/report/6157faecbebcf01bf49097d9?start=2024-03-01&end=2024-03-31&limit=50" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

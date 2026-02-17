@@ -1,0 +1,44 @@
+---
+title: Get Commissions by Vendor
+description: "List commission rates for all vendors"
+api: "GET /v1/commissions/vendor"
+---
+
+## Overview
+
+Returns the commission configuration (type and rate) for every active vendor in your shop.
+
+### Use Cases
+
+- **Audit commission rates** across all vendors in one call
+- **Feed commission data** into financial models or projections
+- **Display vendor terms** in a custom admin dashboard
+- **Detect commission discrepancies** by comparing expected vs. actual rates
+
+## Response
+
+```json 200
+{
+  "vendors": [
+    {
+      "vendorId": "6157faecbebcf01bf49097d9",
+      "vendorName": "acme supplies",
+      "commissionType": "percentage",
+      "commissionAmount": 10
+    },
+    {
+      "vendorId": "6257faecbebcf01bf49097da",
+      "vendorName": "beta goods",
+      "commissionType": "flat",
+      "commissionAmount": 5.00
+    }
+  ]
+}
+```
+
+## Example
+
+```bash
+curl -X GET https://api.puppetvendors.com/v1/commissions/vendor \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

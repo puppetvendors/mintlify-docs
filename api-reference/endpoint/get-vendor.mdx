@@ -1,0 +1,51 @@
+---
+title: Get Vendor
+description: "Retrieve a single vendor by ID"
+api: "GET /v1/vendors/{vendorId}"
+---
+
+## Overview
+
+Fetch detailed information about a specific vendor, including commission settings and profile data.
+
+### Use Cases
+
+- **Look up vendor details** before creating a payout
+- **Display vendor info** in a custom dashboard or storefront widget
+- **Verify vendor existence** before assigning products
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's unique ID.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="users" type="string">
+  Set to `"true"` to include associated user accounts.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "vendor": [
+    {
+      "_id": "6157faecbebcf01bf49097d9",
+      "vendorName": "acme supplies",
+      "commissionType": "percentage",
+      "commissionAmount": 10,
+      "createdAt": "2024-01-15T08:00:00.000Z",
+      "profile": []
+    }
+  ]
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v1/vendors/6157faecbebcf01bf49097d9" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

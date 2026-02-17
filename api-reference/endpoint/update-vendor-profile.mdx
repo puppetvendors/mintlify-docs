@@ -1,0 +1,61 @@
+---
+title: Update Vendor Profile
+description: "Update a vendor's custom profile fields"
+api: "PUT /v1/vendors/{vendorId}/profile"
+---
+
+## Overview
+
+Update one or more custom profile fields for a vendor. Only fields defined in the shop's profile configuration are accepted.
+
+### Use Cases
+
+- **Sync vendor profile data** from an onboarding form or CRM
+- **Bulk-update vendor info** (tax IDs, bank details) via script
+- **Allow vendors to update profiles** through a custom portal
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's unique ID.
+</ParamField>
+
+## Request Body
+
+Send an array of field/value pairs. Use [Get Shop Profile Fields](/api-reference/endpoint/get-shop-profile) to see which fields are available.
+
+```json
+[
+  { "field": "companyName", "value": "Acme Corp" },
+  { "field": "taxId", "value": "GB123456789" }
+]
+```
+
+<ParamField body="field" type="string" required>
+  The profile field name (must match a shop-defined field).
+</ParamField>
+
+<ParamField body="value" type="string | number | boolean" required>
+  The value to set. Cannot be an object.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "message": "Vendor profile updated successfully.",
+  "vendor": { ... }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT "https://api.puppetvendors.com/v1/vendors/6157faecbebcf01bf49097d9/profile" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '[
+    { "field": "companyName", "value": "Acme Corp" },
+    { "field": "phone", "value": "+44 20 7946 0958" }
+  ]'
+```

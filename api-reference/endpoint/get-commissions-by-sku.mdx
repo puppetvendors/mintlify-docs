@@ -1,0 +1,48 @@
+---
+title: Get Commissions by SKU
+description: "List commission rates and cost of goods per SKU"
+api: "GET /v1/commissions/sku"
+---
+
+## Overview
+
+Returns the SKU-level commission configuration and cost of goods for all SKUs registered in your shop.
+
+### Use Cases
+
+- **Audit SKU-level overrides** to ensure correct commission rates per product
+- **Verify cost of goods** values before triggering recalculations
+- **Export COGS data** for margin analysis or financial reporting
+- **Sync SKU pricing** between PuppetVendors and an external ERP
+
+## Response
+
+```json 200
+{
+  "skus": [
+    {
+      "sku": "TSH-LG-BLU",
+      "costOfGoods": 15.50,
+      "commissionType": "percentage",
+      "commissionAmount": 14
+    },
+    {
+      "sku": "MUG-WHT-001",
+      "costOfGoods": 3.20,
+      "commissionType": "flat",
+      "commissionAmount": 2.00
+    }
+  ]
+}
+```
+
+<Info>
+  SKU-level commissions override vendor-level commissions when both are configured. Cost of goods values are used in payout calculations to determine vendor earnings.
+</Info>
+
+## Example
+
+```bash
+curl -X GET https://api.puppetvendors.com/v1/commissions/sku \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

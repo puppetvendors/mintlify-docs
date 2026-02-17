@@ -1,0 +1,45 @@
+---
+title: Get User
+description: "Retrieve a single vendor portal user"
+api: "GET /v1/users/{userId}"
+---
+
+## Overview
+
+Fetch detailed information about a specific vendor portal user account.
+
+### Use Cases
+
+- **Verify user existence** before sending a password reset
+- **Look up which vendor** a user belongs to
+- **Check account status** (approved, invitation date)
+
+## Path Parameters
+
+<ParamField path="userId" type="string" required>
+  The user's unique ID.
+</ParamField>
+
+## Response
+
+Returns the full user document (excluding password).
+
+```json 200
+{
+  "_id": "61a2b3c4d5e6f7g8h9i0j1k2",
+  "email": "vendor@acme.com",
+  "type": "vendor",
+  "approved": true,
+  "shopId": "...",
+  "vendorId": "6157faecbebcf01bf49097d9",
+  "invitationDate": "2024-01-15T08:00:00.000Z",
+  "createdAt": "2024-01-15T08:00:00.000Z"
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v1/users/61a2b3c4d5e6f7g8h9i0j1k2" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

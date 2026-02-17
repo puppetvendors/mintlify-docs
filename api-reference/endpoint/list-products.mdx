@@ -1,0 +1,73 @@
+---
+title: List Products
+description: "Retrieve products with pagination"
+api: "GET /v1/products"
+---
+
+## Overview
+
+Returns a paginated list of products in your shop, including variants, inventory, images, and vendor assignment.
+
+### Use Cases
+
+- **Sync your product catalog** to an external marketplace or PIM
+- **Build a vendor-specific product feed** by filtering with `vendorId`
+- **Monitor product status** (active, draft, archived) across vendors
+- **Export product data** for reporting or analytics
+
+## Query Parameters
+
+<ParamField query="vendorId" type="string">
+  Filter products by vendor ID.
+</ParamField>
+
+<ParamField query="limit" type="number">
+  Number of products to return per page. Default: `100`.
+</ParamField>
+
+<ParamField query="offset" type="number">
+  Number of products to skip. Default: `0`. Use `nextOffset` from the response for pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "total": 250,
+  "nextOffset": 100,
+  "products": [
+    {
+      "_id": "...",
+      "title": "Classic T-Shirt",
+      "handle": "classic-t-shirt",
+      "productType": "Apparel",
+      "vendor": "acme supplies",
+      "vendorId": "6157faecbebcf01bf49097d9",
+      "status": "active",
+      "totalInventory": 150,
+      "isDigital": false,
+      "variants": [...],
+      "images": [...],
+      "tags": ["summer", "cotton"],
+      "createdAt": "2024-01-10T10:00:00.000Z",
+      "updatedAt": "2024-06-01T12:00:00.000Z"
+    }
+  ]
+}
+```
+
+<Info>
+  Use `nextOffset` for cursor-based pagination. When `nextOffset` is `null`, you have reached the last page.
+</Info>
+
+## Example
+
+```bash
+# List all products
+curl -X GET "https://api.puppetvendors.com/v1/products?limit=50" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+
+# List products for a specific vendor
+curl -X GET "https://api.puppetvendors.com/v1/products?vendorId=6157faecbebcf01bf49097d9&limit=50" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

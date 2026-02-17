@@ -1,0 +1,41 @@
+---
+title: Delete User
+description: "Permanently delete a vendor portal user account"
+api: "DELETE /v1/users/{userId}"
+---
+
+## Overview
+
+Permanently removes a vendor portal user account. This cannot be undone.
+
+### Use Cases
+
+- **Revoke portal access** when a vendor team member leaves
+- **Clean up duplicate accounts** created by mistake
+- **Offboard vendors** by removing all associated user accounts
+
+## Path Parameters
+
+<ParamField path="userId" type="string" required>
+  The user's unique ID.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "message": "User deleted successfully.",
+  "user": { ... }
+}
+```
+
+<Warning>
+  This is a permanent deletion, not a soft delete. The user will no longer be able to log into the vendor portal.
+</Warning>
+
+## Example
+
+```bash
+curl -X DELETE "https://api.puppetvendors.com/v1/users/61a2b3c4d5e6f7g8h9i0j1k2" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

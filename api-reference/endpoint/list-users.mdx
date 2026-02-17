@@ -1,0 +1,39 @@
+---
+title: List Users
+description: "Retrieve all vendor portal users"
+api: "GET /v1/users"
+---
+
+## Overview
+
+Returns all vendor portal user accounts registered in your shop, including which vendor each user is associated with.
+
+### Use Cases
+
+- **Audit vendor portal access** to see who has login credentials
+- **Identify inactive accounts** by checking `lastLoggedIn` dates
+- **Sync user data** to an identity provider or HR system
+
+## Response
+
+```json 200
+{
+  "users": [
+    {
+      "userId": "61a2b3c4d5e6f7g8h9i0j1k2",
+      "vendorId": "6157faecbebcf01bf49097d9",
+      "vendorName": "acme supplies",
+      "createdAt": "2024-01-15T08:00:00.000Z",
+      "lastLoggedIn": "2024-06-01T14:30:00.000Z",
+      "email": "vendor@acme.com"
+    }
+  ]
+}
+```
+
+## Example
+
+```bash
+curl -X GET https://api.puppetvendors.com/v1/users \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

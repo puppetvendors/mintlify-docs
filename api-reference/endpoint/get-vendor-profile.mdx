@@ -1,0 +1,38 @@
+---
+title: Get Vendor Profile
+description: "Retrieve a vendor's custom profile fields"
+api: "GET /v1/vendors/{vendorId}/profile"
+---
+
+## Overview
+
+Returns the vendor's custom profile field values. Profile fields are defined at the shop level (see [Get Shop Profile Fields](/api-reference/endpoint/get-shop-profile)) and populated per vendor.
+
+### Use Cases
+
+- **Display vendor details** (company name, tax ID, bank info) on a custom vendor directory
+- **Export vendor profiles** for compliance or onboarding audits
+- **Integrate profile data** into invoicing or accounting systems
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's unique ID.
+</ParamField>
+
+## Response
+
+```json 200
+[
+  { "field": "companyName", "value": "Acme Corp" },
+  { "field": "taxId", "value": "GB123456789" },
+  { "field": "phone", "value": "+44 20 7946 0958" }
+]
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v1/vendors/6157faecbebcf01bf49097d9/profile" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

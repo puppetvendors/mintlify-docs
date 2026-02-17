@@ -1,0 +1,67 @@
+---
+title: Create Vendor
+description: "Register a new vendor in your shop"
+api: "POST /v1/vendors"
+---
+
+## Overview
+
+Creates a new vendor with the specified commission configuration. The vendor name is stored in lowercase and must be unique within your shop.
+
+### Use Cases
+
+- **Automate vendor onboarding** from a registration form or CRM
+- **Bulk-create vendors** by scripting multiple API calls
+- **Sync vendors** from an external marketplace or ERP system
+
+## Request Body
+
+<ParamField body="vendorName" type="string" required>
+  Name of the vendor. Will be converted to lowercase. Must be unique per shop.
+</ParamField>
+
+<ParamField body="commissionType" type="string" required>
+  Commission model: `"percentage"` or `"flat"`.
+</ParamField>
+
+<ParamField body="commissionAmount" type="number" required>
+  Commission value. For percentage type, this is the percentage (e.g. `10` for 10%). For flat type, this is the fixed amount per item.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "message": "Vendor created successfully.",
+  "vendor": {
+    "_id": "6157faecbebcf01bf49097d9",
+    "vendorName": "acme supplies",
+    "commissionType": "percentage",
+    "commissionAmount": 10,
+    "shopId": "...",
+    "createdAt": "2024-01-15T08:00:00.000Z"
+  }
+}
+```
+
+### Error: Duplicate Vendor
+
+```json 409
+{
+  "error": "A vendor with this name already exists.",
+  "vendorName": "acme supplies"
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/vendors \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "vendorName": "Acme Supplies",
+    "commissionType": "percentage",
+    "commissionAmount": 10
+  }'
+```

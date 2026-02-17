@@ -21,9 +21,77 @@
             ]
           },
           {
+            "group": "Vendors",
+            "pages": [
+              "api-reference/endpoint/list-vendors",
+              "api-reference/endpoint/get-vendor",
+              "api-reference/endpoint/create-vendor",
+              "api-reference/endpoint/update-vendor",
+              "api-reference/endpoint/delete-vendor",
+              "api-reference/endpoint/get-vendor-profile",
+              "api-reference/endpoint/update-vendor-profile",
+              "api-reference/endpoint/get-vendor-address",
+              "api-reference/endpoint/update-vendor-address"
+            ]
+          },
+          {
+            "group": "Users",
+            "pages": [
+              "api-reference/endpoint/list-users",
+              "api-reference/endpoint/get-user",
+              "api-reference/endpoint/create-user",
+              "api-reference/endpoint/update-user",
+              "api-reference/endpoint/delete-user"
+            ]
+          },
+          {
+            "group": "Orders",
+            "pages": [
+              "api-reference/endpoint/get-order"
+            ]
+          },
+          {
+            "group": "Products",
+            "pages": [
+              "api-reference/endpoint/list-products"
+            ]
+          },
+          {
+            "group": "Payouts",
+            "pages": [
+              "api-reference/endpoint/list-payouts"
+            ]
+          },
+          {
+            "group": "Fulfillments",
+            "pages": [
+              "api-reference/endpoint/list-fulfillments",
+              "api-reference/endpoint/create-fulfillment"
+            ]
+          },
+          {
+            "group": "Commissions",
+            "pages": [
+              "api-reference/endpoint/get-commissions-by-vendor",
+              "api-reference/endpoint/get-commissions-by-sku"
+            ]
+          },
+          {
+            "group": "Reports",
+            "pages": [
+              "api-reference/endpoint/get-reports"
+            ]
+          },
+          {
             "group": "Line Items",
             "pages": [
               "api-reference/endpoint/update-line-items"
+            ]
+          },
+          {
+            "group": "Shop",
+            "pages": [
+              "api-reference/endpoint/get-shop-profile"
             ]
           }
         ]

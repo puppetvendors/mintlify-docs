@@ -1,0 +1,57 @@
+---
+title: Update Vendor
+description: "Modify a vendor's name or commission settings"
+api: "PUT /v1/vendors/{vendorId}"
+---
+
+## Overview
+
+Update a vendor's name, commission type, or commission amount. Only the fields you include in the request body will be changed.
+
+### Use Cases
+
+- **Adjust commission rates** for seasonal promotions or renegotiated terms
+- **Rename a vendor** after a rebrand
+- **Sync vendor settings** from an external system
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's unique ID.
+</ParamField>
+
+## Request Body
+
+All fields are optional. Only provided fields will be updated.
+
+<ParamField body="vendorName" type="string">
+  Updated vendor name.
+</ParamField>
+
+<ParamField body="commissionType" type="string">
+  `"percentage"` or `"flat"`.
+</ParamField>
+
+<ParamField body="commissionAmount" type="number">
+  Updated commission value.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "message": "Vendor updated successfully.",
+  "vendor": { ... }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT "https://api.puppetvendors.com/v1/vendors/6157faecbebcf01bf49097d9" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "commissionAmount": 12
+  }'
+```

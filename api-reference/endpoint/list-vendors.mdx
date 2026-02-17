@@ -1,0 +1,53 @@
+---
+title: List Vendors
+description: "Retrieve all vendors registered in your shop"
+api: "GET /v1/vendors"
+---
+
+## Overview
+
+Returns a list of all active (non-hidden) vendors in your shop, including their commission configuration and profile data.
+
+### Use Cases
+
+- **Sync vendor roster** to an external ERP, accounting tool, or spreadsheet
+- **Build a vendor directory** on your storefront
+- **Audit commissions** across all vendors at a glance
+- **Power a Zapier/Make workflow** that triggers when vendor data changes
+
+## Query Parameters
+
+<ParamField query="users" type="string">
+  Set to `"true"` to include associated user accounts (email and user ID) for each vendor.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "vendors": [
+    {
+      "vendorId": "6157faecbebcf01bf49097d9",
+      "vendorName": "acme supplies",
+      "commissionType": "percentage",
+      "commissionAmount": 10,
+      "createdAt": "2024-01-15T08:00:00.000Z",
+      "profile": [],
+      "users": [
+        { "_id": "61a2...", "email": "vendor@acme.com" }
+      ]
+    }
+  ]
+}
+```
+
+<Info>
+  The `users` array is only included when `?users=true` is passed. Each user object contains the `_id` and `email` of approved vendor portal accounts.
+</Info>
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v1/vendors?users=true" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

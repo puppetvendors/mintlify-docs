@@ -1,0 +1,46 @@
+---
+title: Get Shop Profile Fields
+description: "List the custom profile fields configured for your shop"
+api: "GET /v1/shop/profile"
+---
+
+## Overview
+
+Returns the list of custom profile field names that have been configured for vendor profiles in your shop. These are the field names accepted by the [Update Vendor Profile](/api-reference/endpoint/update-vendor-profile) endpoint.
+
+### Use Cases
+
+- **Discover available fields** before reading or writing vendor profiles
+- **Build dynamic forms** that adapt to the shop's profile configuration
+- **Validate vendor data** against the expected field list before submission
+
+## Response
+
+```json 200
+{
+  "fields": [
+    "companyName",
+    "taxId",
+    "phone",
+    "website",
+    "description",
+    "bankAccountNumber",
+    "bankRoutingNumber"
+  ]
+}
+```
+
+### No Profile Configured
+
+```json 401
+{
+  "error": "Shop profile is not set."
+}
+```
+
+## Example
+
+```bash
+curl -X GET https://api.puppetvendors.com/v1/shop/profile \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

@@ -5,26 +5,42 @@ description: "Public REST API for the PuppetVendors multi-vendor marketplace pla
 
 ## Overview
 
-The PuppetVendors API allows you to programmatically manage vendor data, update reports, and trigger recalculations for your multi-vendor Shopify store.
+The PuppetVendors API allows you to programmatically manage vendors, users, orders, products, payouts, fulfillments, commissions, and reports for your multi-vendor Shopify store.
 
 **Base URL:** `https://api.puppetvendors.com`
 
-## Available Endpoints
+## Resources
 
 <CardGroup cols={2}>
-  <Card
-    title="Authentication"
-    icon="key"
-    href="/api-reference/authentication"
-  >
+  <Card title="Authentication" icon="key" href="/api-reference/authentication">
     Exchange your API key for a JWT token
   </Card>
-  <Card
-    title="Update Line Items"
-    icon="pen-to-square"
-    href="/api-reference/endpoint/update-line-items"
-  >
-    Update report data, cost of goods, and trigger recalculations
+  <Card title="Vendors" icon="store" href="/api-reference/endpoint/list-vendors">
+    Manage vendor accounts, profiles, and addresses
+  </Card>
+  <Card title="Users" icon="users" href="/api-reference/endpoint/list-users">
+    Create and manage vendor portal user accounts
+  </Card>
+  <Card title="Orders" icon="cart-shopping" href="/api-reference/endpoint/get-order">
+    Retrieve orders and calculated line items
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/endpoint/list-products">
+    List products with inventory and variant details
+  </Card>
+  <Card title="Payouts" icon="money-bill-wave" href="/api-reference/endpoint/list-payouts">
+    Track vendor payout balances and payment status
+  </Card>
+  <Card title="Fulfillments" icon="truck" href="/api-reference/endpoint/list-fulfillments">
+    Monitor and create order fulfillments
+  </Card>
+  <Card title="Commissions" icon="percent" href="/api-reference/endpoint/get-commissions-by-vendor">
+    View commission rates by vendor or SKU
+  </Card>
+  <Card title="Reports" icon="chart-line" href="/api-reference/endpoint/get-reports">
+    Pull vendor sales and earnings reports
+  </Card>
+  <Card title="Line Items" icon="pen-to-square" href="/api-reference/endpoint/update-line-items">
+    Update report data, COGS, and trigger recalculations
   </Card>
 </CardGroup>
 

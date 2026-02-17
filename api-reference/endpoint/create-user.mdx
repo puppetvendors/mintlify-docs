@@ -1,0 +1,67 @@
+---
+title: Create User
+description: "Create a vendor portal user account"
+api: "POST /v1/users"
+---
+
+## Overview
+
+Creates a new vendor portal user account and optionally sends an invitation email with login credentials.
+
+### Use Cases
+
+- **Automate vendor onboarding** — create vendor + user account in one flow
+- **Provision portal access** for new team members of an existing vendor
+- **Bulk-invite vendors** by scripting account creation with `sendEmail: true`
+
+## Request Body
+
+<ParamField body="vendorId" type="string" required>
+  The vendor ID this user will be associated with.
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  User's email address. Will be converted to lowercase.
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  Password for the vendor portal account.
+</ParamField>
+
+<ParamField body="sendEmail" type="boolean">
+  Set to `true` to send an invitation email with login credentials to the user.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "message": "User created successfully.",
+  "user": {
+    "_id": "61a2b3c4d5e6f7g8h9i0j1k2",
+    "email": "vendor@acme.com",
+    "type": "vendor",
+    "vendorId": "6157faecbebcf01bf49097d9",
+    "approved": true,
+    "createdAt": "2024-01-15T08:00:00.000Z"
+  }
+}
+```
+
+<Warning>
+  The password is stored as a bcrypt hash. It cannot be retrieved after creation. If `sendEmail` is `true`, the plaintext password is included in the invitation email.
+</Warning>
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/users \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "vendorId": "6157faecbebcf01bf49097d9",
+    "email": "vendor@acme.com",
+    "password": "securePassword123",
+    "sendEmail": true
+  }'
+```

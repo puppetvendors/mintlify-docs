@@ -1,0 +1,76 @@
+---
+title: Get Order
+description: "Retrieve an order or its calculated line items"
+api: "GET /v1/orders/{orderId}"
+---
+
+## Overview
+
+Fetch a Shopify order by its order ID. Optionally retrieve the calculated line items (with commission, payout, and cost data) instead of the raw order.
+
+### Use Cases
+
+- **Look up order details** for customer support workflows
+- **Pull calculated line items** to verify commission and payout amounts
+- **Feed order data** into an external accounting or fulfillment system
+- **Build a custom order detail page** in a third-party dashboard
+
+## Path Parameters
+
+<ParamField path="orderId" type="string" required>
+  The Shopify order ID (numeric).
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="lineItems" type="string">
+  Set to `"true"` to return calculated line items instead of the raw order document. Calculated line items include commission, payout, cost of goods, and other financial fields.
+</ParamField>
+
+## Response
+
+### Raw Order (default)
+
+```json 200
+{
+  "orders": {
+    "_id": "...",
+    "orderId": 5022136860720,
+    "orderNumber": 1042,
+    "shopId": "...",
+    ...
+  }
+}
+```
+
+### Calculated Line Items (`?lineItems=true`)
+
+```json 200
+{
+  "orders": [
+    {
+      "_id": "...",
+      "lineItemId": 12345678901234,
+      "orderId": 5022136860720,
+      "vendorName": "acme supplies",
+      "sales": 279.99,
+      "commission": 39.20,
+      "costOfItem": 15.50,
+      "payout": 194.13,
+      ...
+    }
+  ]
+}
+```
+
+## Example
+
+```bash
+# Get raw order
+curl -X GET "https://api.puppetvendors.com/v1/orders/5022136860720" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+
+# Get calculated line items
+curl -X GET "https://api.puppetvendors.com/v1/orders/5022136860720?lineItems=true" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

@@ -1,0 +1,70 @@
+---
+title: Update Vendor Address
+description: "Set or update a vendor's business address"
+api: "PUT /v1/vendors/{vendorId}/address"
+---
+
+## Overview
+
+Sets or updates the vendor's business address. Only recognized address fields are accepted; unknown keys are ignored.
+
+### Use Cases
+
+- **Onboard vendors** by collecting their address through an external form
+- **Keep addresses in sync** with an external vendor management system
+- **Update return addresses** for fulfillment workflows
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's unique ID.
+</ParamField>
+
+## Request Body
+
+<ParamField body="address1" type="string">
+  Primary address line.
+</ParamField>
+
+<ParamField body="address2" type="string">
+  Secondary address line (suite, unit, etc.).
+</ParamField>
+
+<ParamField body="city" type="string">
+  City name.
+</ParamField>
+
+<ParamField body="state" type="string">
+  State or province.
+</ParamField>
+
+<ParamField body="postalCode" type="string">
+  Postal or ZIP code.
+</ParamField>
+
+<ParamField body="country" type="string">
+  Country name.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "message": "Vendor address updated successfully.",
+  "vendor": { ... }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT "https://api.puppetvendors.com/v1/vendors/6157faecbebcf01bf49097d9/address" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "address1": "123 Market Street",
+    "city": "London",
+    "postalCode": "EC1A 1BB",
+    "country": "United Kingdom"
+  }'
+```

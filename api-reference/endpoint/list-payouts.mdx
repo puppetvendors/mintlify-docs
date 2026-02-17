@@ -1,0 +1,77 @@
+---
+title: List Payouts
+description: "Retrieve payout line items with filtering"
+api: "GET /v1/payouts"
+---
+
+## Overview
+
+Returns a paginated list of payout line items, showing what is owed, paid, and outstanding for each order item. Supports filtering by vendor, date range, payment status, and fulfillment status.
+
+### Use Cases
+
+- **Generate payout reports** for accounting or tax preparation
+- **Reconcile payments** by comparing paid vs. unpaid balances
+- **Build a custom payout dashboard** for merchant oversight
+- **Automate payment triggers** by monitoring unpaid items via API
+
+## Query Parameters
+
+<ParamField query="vendorId" type="string">
+  Filter by vendor ID.
+</ParamField>
+
+<ParamField query="start" type="string">
+  Start date in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField query="end" type="string">
+  End date in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Payment status filter: `"paid"`, `"partial"`, or `"unpaid"`.
+</ParamField>
+
+<ParamField query="fulfillment" type="string">
+  Fulfillment status: `"fulfilled"` or `"unfulfilled"`.
+</ParamField>
+
+<ParamField query="limit" type="number">
+  Results per page. Default: `100`.
+</ParamField>
+
+<ParamField query="offset" type="number">
+  Number of results to skip. Default: `0`.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "total": 85,
+  "nextOffset": 100,
+  "payouts": [
+    {
+      "_id": "...",
+      "orderNumber": 1042,
+      "orderName": "#1042",
+      "vendorId": "6157faecbebcf01bf49097d9",
+      "vendorName": "acme supplies",
+      "lineItemName": "Classic T-Shirt - Large",
+      "payout": 194.13,
+      "paid": 194.13,
+      "balance": 0,
+      "date": "2024-03-15T00:00:00.000Z"
+    }
+  ]
+}
+```
+
+## Example
+
+```bash
+# Unpaid payouts for a vendor in March 2024
+curl -X GET "https://api.puppetvendors.com/v1/payouts?vendorId=6157fa...&status=unpaid&start=2024-03-01&end=2024-03-31" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

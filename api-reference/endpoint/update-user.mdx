@@ -1,0 +1,52 @@
+---
+title: Update User
+description: "Update a vendor portal user's email or password"
+api: "PUT /v1/users/{userId}"
+---
+
+## Overview
+
+Updates a vendor portal user's email address and/or password.
+
+### Use Cases
+
+- **Reset a vendor's password** when they are locked out
+- **Update email addresses** after a vendor team change
+- **Rotate credentials** as part of a security policy
+
+## Path Parameters
+
+<ParamField path="userId" type="string" required>
+  The user's unique ID.
+</ParamField>
+
+## Request Body
+
+<ParamField body="email" type="string" required>
+  Updated email address.
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  Updated password. Will be bcrypt-hashed before storage.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "message": "User updated successfully.",
+  "user": { ... }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT "https://api.puppetvendors.com/v1/users/61a2b3c4d5e6f7g8h9i0j1k2" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "email": "new-email@acme.com",
+    "password": "newSecurePassword456"
+  }'
+```

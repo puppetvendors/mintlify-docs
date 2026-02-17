@@ -1,0 +1,40 @@
+---
+title: Delete Vendor
+description: "Soft-delete a vendor from your shop"
+api: "DELETE /v1/vendors/{vendorId}"
+---
+
+## Overview
+
+Marks a vendor as hidden. The vendor record is not permanently deleted and will no longer appear in list queries.
+
+### Use Cases
+
+- **Offboard a vendor** who is no longer active
+- **Deactivate vendors** programmatically from an admin tool
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's unique ID.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "message": "Vendor deleted successfully.",
+  "vendor": { ... }
+}
+```
+
+<Warning>
+  This is a soft delete. The vendor's historical data (orders, payouts, reports) is preserved. The vendor will be excluded from all list endpoints.
+</Warning>
+
+## Example
+
+```bash
+curl -X DELETE "https://api.puppetvendors.com/v1/vendors/6157faecbebcf01bf49097d9" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

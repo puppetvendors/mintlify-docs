@@ -1,0 +1,43 @@
+---
+title: Get Vendor Address
+description: "Retrieve a vendor's business address"
+api: "GET /v1/vendors/{vendorId}/address"
+---
+
+## Overview
+
+Returns the vendor's business address stored in their profile.
+
+### Use Cases
+
+- **Generate shipping labels** with the vendor's return address
+- **Display vendor locations** on a store locator map
+- **Pre-fill address fields** in invoicing or payout systems
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's unique ID.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "address1": "123 Market Street",
+  "address2": "Suite 400",
+  "city": "London",
+  "state": "England",
+  "postalCode": "EC1A 1BB",
+  "country": "United Kingdom"
+}
+```
+
+Returns an empty object `{}` if no address is set.
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v1/vendors/6157faecbebcf01bf49097d9/address" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

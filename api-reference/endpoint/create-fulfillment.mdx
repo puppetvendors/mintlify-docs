@@ -1,0 +1,74 @@
+---
+title: Create Fulfillment
+description: "Fulfill line items with tracking information"
+api: "POST /v1/fulfillments"
+---
+
+## Overview
+
+Submit line items for fulfillment with tracking details. This creates a fulfillment in Shopify and updates the line item records in PuppetVendors.
+
+### Use Cases
+
+- **Automate fulfillment** from a third-party warehouse or 3PL system
+- **Bulk-fulfill orders** by scripting API calls from a shipping platform
+- **Connect non-Shopify fulfillment services** to your multi-vendor workflow
+
+## Request Body
+
+<ParamField body="trackingNumber" type="string" required>
+  Shipment tracking number.
+</ParamField>
+
+<ParamField body="shippingCarrier" type="string" required>
+  Shipping carrier name (e.g. `"Royal Mail"`, `"UPS"`, `"FedEx"`).
+</ParamField>
+
+<ParamField body="trackingUrl" type="string" required>
+  URL for tracking the shipment.
+</ParamField>
+
+<ParamField body="lineItemsToFulfill" type="array" required>
+  Array of calculated line item IDs (PuppetVendors `_id` values) to fulfill.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "fulfillments": [
+    {
+      "type": "success",
+      "lineItemId": "...",
+      "message": "Fulfillment completed successfully."
+    }
+  ]
+}
+```
+
+### Partial Failure
+
+If some items fail to fulfill, each item reports individually:
+
+```json 200
+{
+  "fulfillments": [
+    { "type": "success", "lineItemId": "abc...", "message": "Fulfillment completed successfully." },
+    { "type": "error", "lineItemId": "def...", "message": "Already fulfilled" }
+  ]
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/fulfillments \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "trackingNumber": "RM123456789GB",
+    "shippingCarrier": "Royal Mail",
+    "trackingUrl": "https://tracking.royalmail.com/RM123456789GB",
+    "lineItemsToFulfill": ["64a1b2c3d4e5f6...", "64a1b2c3d4e5f7..."]
+  }'
+```
