@@ -9,10 +9,12 @@
   },
   "favicon": "/favicon.svg",
   "api": {
-    "baseUrl": "https://api.puppetvendors.com",
-    "auth": {
-      "method": "key",
-      "name": "x-access-token"
+    "mdx": {
+      "server": "https://api.puppetvendors.com",
+      "auth": {
+        "method": "key",
+        "name": "x-access-token"
+      }
     }
   },
   "navigation": {
