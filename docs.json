@@ -8,6 +8,13 @@
     "dark": "#4F46E5"
   },
   "favicon": "/favicon.svg",
+  "api": {
+    "baseUrl": "https://api.puppetvendors.com",
+    "auth": {
+      "method": "key",
+      "name": "x-access-token"
+    }
+  },
   "navigation": {
     "tabs": [
       {
