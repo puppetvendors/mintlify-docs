@@ -1,7 +1,7 @@
 ---
 title: Bulk Upload SKU Commissions
 description: "Upsert SKU-level commissions and cost of goods in bulk"
-api: "POST /v1/commissions/bulk"
+api: "POST /v1/commissions/sku"
 ---
 
 ## Overview
@@ -95,7 +95,7 @@ Create or update SKU-level commission rates and cost of goods values in bulk. Ea
 ## Example
 
 ```bash
-curl -X POST https://api.puppetvendors.com/v1/commissions/bulk \
+curl -X POST https://api.puppetvendors.com/v1/commissions/sku \
   -H "Content-Type: application/json" \
   -H "x-access-token: YOUR_JWT_TOKEN" \
   -d '{
