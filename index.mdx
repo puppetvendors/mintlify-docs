@@ -48,6 +48,10 @@ The PuppetVendors API allows you to programmatically manage vendors, users, orde
 
 The API is rate-limited to **100 requests per minute** per IP address. Exceeding this limit returns HTTP 429.
 
+## Authentication
+
+All endpoints require a JWT token. Get started by exchanging your API key at [`POST /v1/authenticate`](/api-reference/authentication).
+
 ## Need Help?
 
 Contact [support@puppetvendors.com](mailto:support@puppetvendors.com) for API access or questions.
