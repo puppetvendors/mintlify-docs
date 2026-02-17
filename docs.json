@@ -83,7 +83,8 @@
             "group": "Commissions",
             "pages": [
               "api-reference/endpoint/get-commissions-by-vendor",
-              "api-reference/endpoint/get-commissions-by-sku"
+              "api-reference/endpoint/get-commissions-by-sku",
+              "api-reference/endpoint/bulk-upload-commissions"
             ]
           },
           {
@@ -123,9 +124,5 @@
       }
     ]
   },
-  "footer": {
-    "socials": {
-      "github": "https://github.com/puppetvendors"
-    }
-  }
+  "footer": {}
 }

@@ -1,0 +1,116 @@
+---
+title: Bulk Upload SKU Commissions
+description: "Upsert SKU-level commissions and cost of goods in bulk"
+api: "POST /v1/commissions/bulk"
+---
+
+## Overview
+
+Create or update SKU-level commission rates and cost of goods values in bulk. Each SKU is upserted — if a matching SKU already exists for your shop it is updated, otherwise a new record is created.
+
+### Use Cases
+
+- **Bulk-set commission overrides** for hundreds of SKUs at once
+- **Sync cost of goods** from an ERP or inventory system
+- **Onboard new product lines** with pre-configured commission rates
+- **Periodic updates** to COGS values as supplier pricing changes
+
+## Request Body
+
+<ParamField body="skus" type="array" required>
+  Array of SKU commission records (max 500 per request).
+
+  <Expandable title="SKU object properties">
+    <ParamField body="sku" type="string" required>
+      The SKU identifier. Must be a non-empty string (whitespace is trimmed).
+    </ParamField>
+
+    <ParamField body="commissionType" type="string" default="percentage">
+      Commission type. Must be `"percentage"` or `"flat"`.
+    </ParamField>
+
+    <ParamField body="commissionRate" type="number" default={0}>
+      Commission rate. For `percentage` type this is the percentage value (e.g. `14` for 14%). For `flat` type this is the flat currency amount. Must be >= 0.
+    </ParamField>
+
+    <ParamField body="costOfGoods" type="number">
+      Cost of goods per unit. Must be >= 0 when provided.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response
+
+**Success — all items processed:**
+
+```json 200
+{
+  "success": true,
+  "received": 3,
+  "created": 2,
+  "updated": 1,
+  "errors": []
+}
+```
+
+**Partial failure — some items had validation errors:**
+
+```json 200
+{
+  "success": false,
+  "received": 3,
+  "created": 1,
+  "updated": 0,
+  "errors": [
+    {
+      "index": 1,
+      "sku": "BAD-SKU",
+      "error": "commissionType must be 'percentage' or 'flat'"
+    },
+    {
+      "index": 2,
+      "sku": "",
+      "error": "sku is required"
+    }
+  ]
+}
+```
+
+**Validation error — request-level:**
+
+```json 422
+{
+  "error": "\"skus\" array is required"
+}
+```
+
+<Info>
+  This endpoint uses **upsert** behavior. If a SKU already exists for your shop, the provided fields are updated. If it doesn't exist, a new SKU record is created. Duplicate SKUs within the same request are processed in order — the last entry wins.
+</Info>
+
+<Warning>
+  Commission values are applied as-is. A `commissionRate` of `14` means 14% (not 0.14). Do not divide by 100.
+</Warning>
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/commissions/bulk \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "skus": [
+      {
+        "sku": "TSH-LG-BLU",
+        "commissionType": "percentage",
+        "commissionRate": 14,
+        "costOfGoods": 15.50
+      },
+      {
+        "sku": "MUG-WHT-001",
+        "commissionType": "flat",
+        "commissionRate": 2.00
+      }
+    ]
+  }'
+```
