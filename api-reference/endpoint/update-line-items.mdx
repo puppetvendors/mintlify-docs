@@ -31,11 +31,11 @@ Target specific line items by Shopify line item ID and order ID.
     </ParamField>
 
     <ParamField body="fields" type="object">
-      Fields to update. Required when `recalculate` is not `true`. See [Updatable Fields](#updatable-fields) below.
+      Fields to update. See [Updatable Fields](#updatable-fields) below. Either `fields` or `recalculate` (or both) must be provided.
     </ParamField>
 
     <ParamField body="recalculate" type="boolean">
-      Set to `true` to trigger recalculation instead of direct update.
+      Set to `true` to trigger recalculation after updating. When combined with `fields`, the fields are written to the DB first, then recalculation is queued.
     </ParamField>
   </Expandable>
 </ParamField>
@@ -112,12 +112,25 @@ Only the following fields are accepted. Unknown fields will be rejected.
 
 ## Recalculate Mode
 
-Instead of directly setting field values, you can trigger the recalculation pipeline by setting `recalculate: true`. This re-runs the full commission and payout calculations using current shop settings.
+You can trigger the recalculation pipeline by setting `recalculate: true`. This re-runs the full commission and payout calculations using current shop settings. Recalculation is **asynchronous** — the response confirms it has been queued, not completed.
 
-Recalculation is **asynchronous**. The response confirms that recalculation has been queued, not that it has completed.
+You can combine `fields` with `recalculate: true` to **update fields first, then recalculate**. This is useful when you want to set a new cost of goods and immediately recalculate the payout based on that value.
 
 <CodeGroup>
-```json Recalculate specific item
+```json Update and recalculate
+{
+  "items": [
+    {
+      "lineItemId": 12345678901234,
+      "orderId": 98765432101234,
+      "fields": { "costOfItem": 15.50 },
+      "recalculate": true
+    }
+  ]
+}
+```
+
+```json Recalculate only
 {
   "items": [
     {
@@ -143,13 +156,15 @@ Recalculation is **asynchronous**. The response confirms that recalculation has 
 
 ### Success
 
+Possible `status` values: `"updated"`, `"recalculate_queued"`, `"updated_and_recalculate_queued"`.
+
 ```json 200
 {
   "success": true,
-  "updated": 3,
-  "recalculateQueued": 0,
+  "updated": 1,
+  "recalculateQueued": 1,
   "results": [
-    { "lineItemId": 123, "orderId": 456, "status": "updated" }
+    { "lineItemId": 123, "orderId": 456, "status": "updated_and_recalculate_queued" }
   ],
   "errors": []
 }
