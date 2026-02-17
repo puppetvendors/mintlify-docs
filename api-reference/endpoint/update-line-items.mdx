@@ -1,0 +1,246 @@
+---
+title: Update Line Items
+description: "Update report data and cost of goods for line items"
+api: "POST /v1/lineitems/update"
+---
+
+## Overview
+
+Update financial fields on line items (report data) and cost of goods records. Supports updating specific line items by ID or bulk-updating all line items matching a SKU.
+
+The endpoint accepts two mutually exclusive modes:
+- **Items mode** — update specific line items by Shopify line item ID and order ID
+- **By SKU mode** — update all line items matching a SKU
+
+---
+
+## Items Mode
+
+Target specific line items by Shopify line item ID and order ID.
+
+<ParamField body="items" type="array" required>
+  Array of line item update objects (max 100 per request).
+
+  <Expandable title="Item object properties">
+    <ParamField body="lineItemId" type="number" required>
+      Shopify line item ID.
+    </ParamField>
+
+    <ParamField body="orderId" type="number" required>
+      Shopify order ID.
+    </ParamField>
+
+    <ParamField body="fields" type="object">
+      Fields to update. Required when `recalculate` is not `true`. See [Updatable Fields](#updatable-fields) below.
+    </ParamField>
+
+    <ParamField body="recalculate" type="boolean">
+      Set to `true` to trigger recalculation instead of direct update.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+### Example
+
+```json
+{
+  "items": [
+    {
+      "lineItemId": 12345678901234,
+      "orderId": 98765432101234,
+      "fields": {
+        "costOfItem": 15.50,
+        "commission": 5.00
+      }
+    }
+  ]
+}
+```
+
+---
+
+## By SKU Mode
+
+Update all line items matching a SKU value for your shop.
+
+<ParamField body="bySku" type="string" required>
+  The SKU value to match.
+</ParamField>
+
+<ParamField body="fields" type="object">
+  Fields to update. Required when `recalculate` is not `true`. See [Updatable Fields](#updatable-fields) below.
+</ParamField>
+
+<ParamField body="recalculate" type="boolean">
+  Set to `true` to trigger recalculation for all matching line items.
+</ParamField>
+
+### Example
+
+```json
+{
+  "bySku": "SKU-001",
+  "fields": {
+    "costOfItem": 15.50
+  }
+}
+```
+
+---
+
+## Updatable Fields
+
+Only the following fields are accepted. Unknown fields will be rejected.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `costOfItem` | Number | Cost of goods for this line item. Also updates the SKU cost of goods record (creates one if it does not exist). |
+| `commission` | Number | Commission amount |
+| `commissionPlan` | String | Commission plan label (e.g. "14%") |
+| `deduction` | Number | Vendor deduction |
+| `payout` | Number | Vendor payout amount |
+| `shipping` | Number | Shipping amount |
+| `sales` | Number | Sales amount |
+| `salesAfterDiscount` | Number | Sales after discount |
+| `tax` | Number | Tax amount |
+| `tcs` | Number | TCS amount |
+| `taxOnCommissions` | Number | Tax on commissions |
+| `totalGlobalDeductions` | Number | Global deductions |
+| `discount` | Number | Discount amount |
+
+---
+
+## Recalculate Mode
+
+Instead of directly setting field values, you can trigger the recalculation pipeline by setting `recalculate: true`. This re-runs the full commission and payout calculations using current shop settings.
+
+Recalculation is **asynchronous**. The response confirms that recalculation has been queued, not that it has completed.
+
+<CodeGroup>
+```json Recalculate specific item
+{
+  "items": [
+    {
+      "lineItemId": 12345678901234,
+      "orderId": 98765432101234,
+      "recalculate": true
+    }
+  ]
+}
+```
+
+```json Recalculate by SKU
+{
+  "bySku": "SKU-001",
+  "recalculate": true
+}
+```
+</CodeGroup>
+
+---
+
+## Response
+
+### Success
+
+```json 200
+{
+  "success": true,
+  "updated": 3,
+  "recalculateQueued": 0,
+  "results": [
+    { "lineItemId": 123, "orderId": 456, "status": "updated" }
+  ],
+  "errors": []
+}
+```
+
+### Partial Failure
+
+When some items succeed and others fail, the response includes both results and errors.
+
+```json 200
+{
+  "success": false,
+  "updated": 1,
+  "recalculateQueued": 0,
+  "results": [
+    { "lineItemId": 123, "orderId": 456, "status": "updated" }
+  ],
+  "errors": [
+    { "lineItemId": 999, "orderId": 888, "error": "Line item not found" }
+  ]
+}
+```
+
+### Validation Error
+
+```json 422
+{
+  "error": "Description of the validation error"
+}
+```
+
+---
+
+## Important Notes
+
+<Warning>
+  **Frozen line items** are automatically skipped and reported in the `errors` array.
+</Warning>
+
+<Info>
+  When `costOfItem` is included in fields, the **SKU cost of goods record** is automatically updated (or created if it does not exist). This ensures future recalculations use the correct COGS value.
+</Info>
+
+- **Shop isolation**: All updates are scoped to your authenticated shop. You cannot update line items belonging to other shops.
+- **Max 100 items** per request when using items mode.
+- **Mutually exclusive modes**: Provide either `items` or `bySku`, not both.
+
+---
+
+## Examples
+
+### Update cost of goods by SKU
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/lineitems/update \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "bySku": "SKU-001",
+    "fields": { "costOfItem": 15.50 }
+  }'
+```
+
+### Update specific line items
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/lineitems/update \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "items": [
+      {
+        "lineItemId": 12345678901234,
+        "orderId": 98765432101234,
+        "fields": {
+          "costOfItem": 15.50,
+          "payout": 25.00
+        }
+      }
+    ]
+  }'
+```
+
+### Trigger recalculation by SKU
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/lineitems/update \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "bySku": "SKU-001",
+    "recalculate": true
+  }'
+```

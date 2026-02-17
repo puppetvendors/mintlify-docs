@@ -1,0 +1,49 @@
+---
+title: Authentication
+description: "Authenticate with the PuppetVendors API"
+---
+
+## Overview
+
+All API endpoints require a JWT token passed via the `x-access-token` header. You obtain this token by exchanging your API key and shop domain.
+
+## Get a Token
+
+<ParamField body="apiKey" type="string" required>
+  Your API key, found at **Settings > Information** in the PuppetVendors dashboard.
+</ParamField>
+
+<ParamField body="shopDomain" type="string" required>
+  Your Shopify store domain (e.g. `my-store.myshopify.com`).
+</ParamField>
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/authenticate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "YOUR_API_KEY",
+    "shopDomain": "my-store.myshopify.com"
+  }'
+```
+
+### Response
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIs...",
+  "shopDomain": "my-store.myshopify.com"
+}
+```
+
+## Using the Token
+
+Include the token in all subsequent requests:
+
+```bash
+curl -X POST https://api.puppetvendors.com/v1/lineitems/update \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{ ... }'
+```
+
+Tokens expire after **24 hours**. Use `POST /v1/refresh-token` with a valid token to get a new one.

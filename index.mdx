@@ -1,71 +1,37 @@
 ---
-title: Introduction
-description: "Welcome to the home of your new documentation"
+title: PuppetVendors API
+description: "Public REST API for the PuppetVendors multi-vendor marketplace platform"
 ---
 
-<img
-  className="block dark:hidden"
-  src="/images/hero-light.png"
-  alt="Hero Light"
-/>
-<img
-  className="hidden dark:block"
-  src="/images/hero-dark.png"
-  alt="Hero Dark"
-/>
+## Overview
 
-## Setting up
+The PuppetVendors API allows you to programmatically manage vendor data, update reports, and trigger recalculations for your multi-vendor Shopify store.
 
-The first step to world-class documentation is setting up your editing environments.
+**Base URL:** `https://api.puppetvendors.com`
+
+## Available Endpoints
 
 <CardGroup cols={2}>
   <Card
-    title="Edit Your Docs"
+    title="Authentication"
+    icon="key"
+    href="/api-reference/authentication"
+  >
+    Exchange your API key for a JWT token
+  </Card>
+  <Card
+    title="Update Line Items"
     icon="pen-to-square"
-    href="https://mintlify.com/docs/quickstart"
+    href="/api-reference/endpoint/update-line-items"
   >
-    Get your docs set up locally for easy development
-  </Card>
-  <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
-  >
-    Preview your changes before you push to make sure they're perfect
+    Update report data, cost of goods, and trigger recalculations
   </Card>
 </CardGroup>
 
-## Make it yours
+## Rate Limits
 
-Update your docs to your brand and add valuable content for the best user conversion.
+The API is rate-limited to **100 requests per minute** per IP address. Exceeding this limit returns HTTP 429.
 
-<CardGroup cols={2}>
-  <Card
-    title="Customize Style"
-    icon="palette"
-    href="https://mintlify.com/docs/settings/global"
-  >
-    Customize your docs to your company's colors and brands
-  </Card>
-  <Card
-    title="Reference APIs"
-    icon="code"
-    href="https://mintlify.com/docs/api-playground/openapi"
-  >
-    Automatically generate endpoints from an OpenAPI spec
-  </Card>
-  <Card
-    title="Add Components"
-    icon="screwdriver-wrench"
-    href="https://mintlify.com/docs/content/components/accordions"
-  >
-    Build interactive features and designs to guide your users
-  </Card>
-  <Card
-    title="Get Inspiration"
-    icon="stars"
-    href="https://mintlify.com/customers"
-  >
-    Check out our showcase of our favorite documentation
-  </Card>
-</CardGroup>
+## Need Help?
+
+Contact [support@puppetvendors.com](mailto:support@puppetvendors.com) for API access or questions.
