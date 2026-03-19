@@ -11,9 +11,16 @@ description: "Authenticate with the PuppetVendors V2 API using JWT tokens"
 
 All V2 API endpoints require a JWT token passed via the `x-access-token` header. You obtain this token by exchanging your API key at `POST /v2/authenticate`.
 
-## Token Scopes
+## API Key Types
 
-V2 introduces two token scopes:
+V2 uses two types of API keys. The key type determines the token scope automatically — just pass the key, no extra parameters needed.
+
+| Key Type | Prefix | Token Scope | Where to Find |
+|----------|--------|-------------|---------------|
+| **Merchant key** | _(none)_ | `merchant` — full access | **Settings > Information** in the PuppetVendors dashboard |
+| **Vendor key** | `vk_` | `vendor` — single vendor only | Assigned per vendor by the merchant |
+
+## Token Scopes
 
 | Scope | Access | Use Case |
 |-------|--------|----------|
@@ -22,26 +29,25 @@ V2 introduces two token scopes:
 
 ### Merchant Token
 
-Authenticate with just your API key to get a merchant-scoped token:
+Authenticate with a merchant (shop) API key:
 
 ```bash
 curl -X POST https://api.puppetvendors.com/v2/authenticate \
   -H "Content-Type: application/json" \
   -d '{
-    "apiKey": "YOUR_API_KEY"
+    "apiKey": "YOUR_MERCHANT_API_KEY"
   }'
 ```
 
 ### Vendor Token
 
-Include a `vendorId` to get a vendor-scoped token:
+Authenticate with a vendor API key (starts with `vk_`):
 
 ```bash
 curl -X POST https://api.puppetvendors.com/v2/authenticate \
   -H "Content-Type: application/json" \
   -d '{
-    "apiKey": "YOUR_API_KEY",
-    "vendorId": "507f1f77bcf86cd799439011"
+    "apiKey": "vk_YOUR_VENDOR_API_KEY"
   }'
 ```
 
