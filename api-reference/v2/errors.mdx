@@ -1,0 +1,81 @@
+---
+title: "Error Handling"
+description: "Standard error responses in the V2 API"
+---
+
+<Note>
+  **V2 Alpha** — This error format is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+All V2 API endpoints return a consistent error format. Errors always include `success: false` and an `error` object with a human-readable `message` and a machine-readable `code`.
+
+## Error Response Format
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Invalid API key",
+    "code": "UNAUTHORIZED"
+  }
+}
+```
+
+## HTTP Status Codes
+
+| Status | Description |
+|--------|-------------|
+| **200** | Success |
+| **201** | Resource created |
+| **400** | Bad request — invalid parameters or missing required fields |
+| **401** | Unauthorized — missing, invalid, or expired token |
+| **403** | Forbidden — vendor token accessing another vendor's data |
+| **404** | Not found — resource does not exist |
+| **409** | Conflict — resource creation/update conflict |
+| **429** | Too many requests — rate limit exceeded |
+| **500** | Internal server error |
+
+## Error Codes
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `UNAUTHORIZED` | 401 | Invalid API key or expired token |
+| `FORBIDDEN` | 403 | Vendor token accessing another vendor's data |
+| `NOT_FOUND` | 404 | Requested resource not found |
+| `VALIDATION_ERROR` | 400 | Request body or query parameters failed validation |
+| `VENDOR_ID_REQUIRED` | 400 | Merchant token missing required `vendorId` parameter |
+| `FULFILLMENT_FAILED` | 400 | Fulfillment creation failed |
+| `CONFLICT` | 409 | Resource creation/update conflict |
+| `INTERNAL_ERROR` | 500 | Unexpected server error |
+
+## Validation Errors
+
+When request validation fails, the `message` field contains details about which fields are invalid:
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "createdAtMin must be a valid ISO 8601 date",
+    "code": "VALIDATION_ERROR"
+  }
+}
+```
+
+## Rate Limiting
+
+When you exceed 100 requests per minute, you will receive:
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Too many requests, please try again later",
+    "code": "RATE_LIMITED"
+  }
+}
+```
+
+Wait at least 60 seconds before retrying.

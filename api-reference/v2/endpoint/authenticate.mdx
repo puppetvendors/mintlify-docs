@@ -1,0 +1,93 @@
+---
+title: "Authenticate"
+description: "Exchange your API key for a JWT token"
+api: "POST /v2/authenticate"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Authenticate using your shop's API key to obtain a JWT token. Optionally provide a `vendorId` to get a vendor-scoped token with restricted access.
+
+### Token Scopes
+
+- **merchant** — Full access to all shop data and all vendors
+- **vendor** — Limited access to only the specified vendor's data
+
+### Use Cases
+
+- **Backend integrations** — Authenticate once, then use the token for all API calls
+- **Vendor apps** — Get vendor-scoped tokens for secure, isolated access
+- **Token rotation** — Re-authenticate when tokens expire (24h)
+
+## Request Body
+
+<ParamField body="apiKey" type="string" required>
+  Your API key, found at **Settings > Information** in the PuppetVendors dashboard.
+</ParamField>
+
+<ParamField body="shopDomain" type="string">
+  Your Shopify store domain (e.g. `my-store.myshopify.com`). Optional in V2 — the shop is resolved from the API key.
+</ParamField>
+
+<ParamField body="vendorId" type="string">
+  MongoDB ObjectId of the vendor. When provided, the returned token is scoped to this vendor only.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 86400,
+    "scope": "merchant",
+    "shopDomain": "my-store.myshopify.com"
+  }
+}
+```
+
+### Error Responses
+
+```json 401
+{
+  "success": false,
+  "error": {
+    "message": "Invalid API key",
+    "code": "UNAUTHORIZED"
+  }
+}
+```
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Vendor not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+# Merchant token
+curl -X POST https://api.puppetvendors.com/v2/authenticate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "sk_live_abc123def456"
+  }'
+
+# Vendor-scoped token
+curl -X POST https://api.puppetvendors.com/v2/authenticate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "sk_live_abc123def456",
+    "vendorId": "507f1f77bcf86cd799439011"
+  }'
+```

@@ -1,0 +1,115 @@
+---
+title: "Create Fulfillment"
+description: "Fulfill line items with tracking information"
+api: "POST /v2/fulfillments"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Create a fulfillment for one or more line items. This creates a fulfillment in Shopify and updates the line item records in PuppetVendors. Optionally sends a shipping notification to the customer.
+
+Vendor tokens can only fulfill their own line items.
+
+### Use Cases
+
+- **Automate fulfillment** from a third-party warehouse or 3PL system
+- **Bulk-fulfill orders** by scripting API calls from a shipping platform
+- **Connect non-Shopify fulfillment services** to your multi-vendor workflow
+
+## Request Body
+
+<ParamField body="lineItemIds" type="string[]" required>
+  Array of PuppetVendors line item IDs (`_id` values) to fulfill. At least one is required.
+</ParamField>
+
+<ParamField body="trackingNumber" type="string">
+  Shipment tracking number.
+</ParamField>
+
+<ParamField body="shippingCarrier" type="string">
+  Shipping carrier name (e.g. `"Royal Mail"`, `"UPS"`, `"FedEx"`).
+</ParamField>
+
+<ParamField body="trackingUrl" type="string">
+  URL for tracking the shipment. Must be a valid URL.
+</ParamField>
+
+<ParamField body="notifyCustomer" type="boolean" default="false">
+  Whether to send a shipping notification email to the customer.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "success": true,
+    "fulfillments": [
+      {
+        "type": "success",
+        "lineItemId": "507f1f77bcf86cd799439015",
+        "message": "Fulfillment completed successfully."
+      }
+    ]
+  }
+}
+```
+
+### Partial Failure
+
+If some items fail to fulfill, each item reports individually:
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "success": true,
+    "fulfillments": [
+      { "type": "success", "lineItemId": "507f1f77bcf86cd799439015", "message": "Fulfillment completed successfully." },
+      { "type": "error", "lineItemId": "507f1f77bcf86cd799439016", "message": "Already fulfilled" }
+    ]
+  }
+}
+```
+
+### Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": {
+    "message": "Failed to create fulfillments",
+    "code": "FULFILLMENT_FAILED"
+  }
+}
+```
+
+```json 403
+{
+  "success": false,
+  "error": {
+    "message": "Cannot fulfill other vendors' line items",
+    "code": "FORBIDDEN"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/fulfillments \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "trackingNumber": "RM123456789GB",
+    "shippingCarrier": "Royal Mail",
+    "trackingUrl": "https://tracking.royalmail.com/RM123456789GB",
+    "lineItemIds": ["507f1f77bcf86cd799439015", "507f1f77bcf86cd799439016"],
+    "notifyCustomer": true
+  }'
+```

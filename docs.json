@@ -100,6 +100,64 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "API V2 (Alpha)",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "api-reference/v2/introduction",
+              "api-reference/v2/authentication",
+              "api-reference/v2/pagination",
+              "api-reference/v2/errors"
+            ]
+          },
+          {
+            "group": "Authentication",
+            "pages": [
+              "api-reference/v2/endpoint/authenticate",
+              "api-reference/v2/endpoint/refresh-token"
+            ]
+          },
+          {
+            "group": "Orders",
+            "pages": [
+              "api-reference/v2/endpoint/list-orders",
+              "api-reference/v2/endpoint/get-order"
+            ]
+          },
+          {
+            "group": "Products",
+            "pages": [
+              "api-reference/v2/endpoint/list-products",
+              "api-reference/v2/endpoint/get-product",
+              "api-reference/v2/endpoint/create-product"
+            ]
+          },
+          {
+            "group": "Fulfillments",
+            "pages": [
+              "api-reference/v2/endpoint/list-fulfillments",
+              "api-reference/v2/endpoint/create-fulfillment",
+              "api-reference/v2/endpoint/update-fulfillment",
+              "api-reference/v2/endpoint/cancel-fulfillment"
+            ]
+          },
+          {
+            "group": "Payouts",
+            "pages": [
+              "api-reference/v2/endpoint/list-payouts"
+            ]
+          },
+          {
+            "group": "Reports",
+            "pages": [
+              "api-reference/v2/endpoint/get-vendor-report",
+              "api-reference/v2/endpoint/get-vendor-report-summary"
+            ]
+          }
+        ]
       }
     ],
     "global": {

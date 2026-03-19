@@ -1,0 +1,82 @@
+---
+title: "Update Fulfillment"
+description: "Update fulfillment tracking information"
+api: "PUT /v2/fulfillments/{fulfillmentId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update tracking information on an existing fulfillment. This syncs the updated tracking to Shopify and optionally re-notifies the customer. Vendor tokens can only update their own fulfillments.
+
+### Use Cases
+
+- **Correct tracking numbers** — Fix a mistyped tracking number after fulfillment
+- **Update carrier** — Change the shipping carrier if initially set incorrectly
+- **Re-notify customers** — Resend shipping notifications with corrected info
+
+## Path Parameters
+
+<ParamField path="fulfillmentId" type="string" required>
+  The line item ID (fulfillment is stored on the line item record).
+</ParamField>
+
+## Request Body
+
+All fields are optional. Only provided fields will be updated.
+
+<ParamField body="trackingNumber" type="string">
+  Updated tracking number.
+</ParamField>
+
+<ParamField body="shippingCarrier" type="string">
+  Updated shipping carrier name.
+</ParamField>
+
+<ParamField body="trackingUrl" type="string">
+  Updated tracking URL. Must be a valid URL.
+</ParamField>
+
+<ParamField body="notifyCustomer" type="boolean">
+  Whether to send a notification email to the customer with the updated tracking.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "message": "Fulfillment updated successfully"
+  }
+}
+```
+
+### Error Responses
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Fulfillment not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT "https://api.puppetvendors.com/v2/fulfillments/507f1f77bcf86cd799439015" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "trackingNumber": "1Z999AA10123456784",
+    "shippingCarrier": "UPS",
+    "trackingUrl": "https://www.ups.com/track?tracknum=1Z999AA10123456784",
+    "notifyCustomer": true
+  }'
+```

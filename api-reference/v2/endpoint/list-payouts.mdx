@@ -1,0 +1,106 @@
+---
+title: "List Payouts"
+description: "Retrieve payout items with cursor-based pagination"
+api: "GET /v2/payouts"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of payout items (line items with payout information). Vendor tokens are automatically scoped to their own payouts. Merchant tokens must provide a `vendorId` query parameter.
+
+### Use Cases
+
+- **Payout dashboards** — Display pending and completed payouts per vendor
+- **Accounting reconciliation** — Export payout data for bookkeeping
+- **Payment processing** — Identify unpaid balances for batch payments
+
+## Query Parameters
+
+<ParamField query="vendorId" type="string" required>
+  Filter by vendor ObjectId. Required for merchant tokens; auto-filled for vendor tokens.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by payout status. One of: `paid`, `partial`, `unpaid`.
+</ParamField>
+
+<ParamField query="fulfillment" type="string">
+  Filter by fulfillment status. One of: `fulfilled`, `unfulfilled`.
+</ParamField>
+
+<ParamField query="dateMin" type="string">
+  Filter by date (minimum, ISO 8601).
+</ParamField>
+
+<ParamField query="dateMax" type="string">
+  Filter by date (maximum, ISO 8601).
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search in order name/number or line item name (max 200 characters).
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1–100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1–100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "_id": "507f1f77bcf86cd799439020",
+        "vendorId": "507f1f77bcf86cd799439011",
+        "vendorName": "Acme Supplies",
+        "orderId": 5123456789,
+        "orderNumber": 1042,
+        "orderName": "#1042",
+        "lineItemName": "Widget Pro - Large / Blue",
+        "lineItemSku": "WP-LG-BL",
+        "quantity": 2,
+        "sales": 279.99,
+        "commission": 39.20,
+        "payout": 240.79,
+        "paid": 0,
+        "balance": 240.79,
+        "payoutStatus": "unpaid",
+        "fulfillmentStatus": "fulfilled",
+        "date": "2024-06-15T10:30:00.000Z"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAyMCJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAzMCJ9",
+      "totalCount": 500
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/payouts?vendorId=507f1f77bcf86cd799439011&status=unpaid&first=20" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

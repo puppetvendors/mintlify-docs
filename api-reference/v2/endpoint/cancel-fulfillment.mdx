@@ -1,0 +1,55 @@
+---
+title: "Cancel Fulfillment"
+description: "Cancel a fulfillment and unfulfill the associated line items"
+api: "DELETE /v2/fulfillments/{fulfillmentId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Cancel a fulfillment and set the associated line items back to unfulfilled status. This also cancels the fulfillment in Shopify. Vendor tokens can only cancel their own fulfillments.
+
+### Use Cases
+
+- **Order corrections** — Cancel a fulfillment if the wrong items were shipped
+- **Shipping errors** — Unfulfill items when a shipment is returned or lost
+- **Re-fulfillment** — Cancel and re-create with correct tracking info
+
+## Path Parameters
+
+<ParamField path="fulfillmentId" type="string" required>
+  The line item ID (fulfillment is stored on the line item record).
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "deleted": true
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Fulfillment not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X DELETE "https://api.puppetvendors.com/v2/fulfillments/507f1f77bcf86cd799439015" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

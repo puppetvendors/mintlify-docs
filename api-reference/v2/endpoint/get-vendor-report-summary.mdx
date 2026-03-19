@@ -1,0 +1,72 @@
+---
+title: "Get Vendor Report Summary"
+description: "Retrieve aggregated sales totals for a vendor"
+api: "GET /v2/reports/{vendorId}/summary"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Get aggregated totals for a vendor including total quantity, net sales, commission, deductions, payout, and paid/unpaid amounts. Vendor tokens can only access their own reports.
+
+### Use Cases
+
+- **Dashboard summary cards** — Show key metrics at a glance
+- **Period reporting** — Get totals for a specific date range
+- **Payout overviews** — Quick view of outstanding balances
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's MongoDB ObjectId.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="dateStart" type="string">
+  Filter by start date (ISO 8601).
+</ParamField>
+
+<ParamField query="dateEnd" type="string">
+  Filter by end date (ISO 8601).
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "totalQuantity": 1250,
+    "totalNetSales": 45890.50,
+    "totalCommission": 6424.67,
+    "totalDeduction": 0,
+    "totalPayout": 39465.83,
+    "totalPaid": 32000.00,
+    "totalBalance": 7465.83,
+    "itemCount": 320
+  }
+}
+```
+
+### Error Response
+
+```json 403
+{
+  "success": false,
+  "error": {
+    "message": "Vendor tokens can only access their own reports",
+    "code": "FORBIDDEN"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/reports/507f1f77bcf86cd799439011/summary?dateStart=2024-01-01T00:00:00Z&dateEnd=2024-12-31T23:59:59Z" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

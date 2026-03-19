@@ -1,0 +1,94 @@
+---
+title: "List Products"
+description: "Retrieve products with cursor-based pagination and filters"
+api: "GET /v2/products"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of products. Vendor tokens are automatically scoped to their own products. Merchant tokens can optionally filter by vendor.
+
+### Use Cases
+
+- **Product catalogue sync** — Export product data to external systems
+- **Inventory dashboards** — Monitor stock levels across vendors
+- **Vendor product management** — List a specific vendor's products
+
+## Query Parameters
+
+<ParamField query="vendorId" type="string">
+  Filter by vendor ObjectId. Vendor tokens are auto-scoped and cannot override this.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by product status. One of: `active`, `draft`, `archived`.
+</ParamField>
+
+<ParamField query="createdAtMin" type="string">
+  Filter by creation date (minimum, ISO 8601).
+</ParamField>
+
+<ParamField query="createdAtMax" type="string">
+  Filter by creation date (maximum, ISO 8601).
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search in product title and vendor name (max 200 characters).
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1–100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1–100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "_id": "507f1f77bcf86cd799439013",
+        "title": "Widget Pro",
+        "handle": "widget-pro",
+        "status": "active",
+        "vendorId": "507f1f77bcf86cd799439011",
+        "productType": "Widgets",
+        "totalInventory": 150,
+        "createdAt": "2024-03-10T08:00:00.000Z",
+        "updatedAt": "2024-06-15T14:30:00.000Z"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMyJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAyMCJ9",
+      "totalCount": 85
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/products?first=20&status=active" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

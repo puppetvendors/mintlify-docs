@@ -1,0 +1,100 @@
+---
+title: "Get Order"
+description: "Retrieve a single order with line items, timeline, and vendor payouts"
+api: "GET /v2/orders/{orderId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve detailed information for a single order, including its calculated line items, timeline events, and vendor payout breakdown. Vendor tokens can only access orders containing their own line items.
+
+### Use Cases
+
+- **Order detail views** — Display full order breakdown in custom UIs
+- **Payout reconciliation** — Check vendor earnings per order
+- **Fulfillment planning** — See which line items need fulfillment
+
+## Path Parameters
+
+<ParamField path="orderId" type="string" required>
+  The order's MongoDB ObjectId.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "order": {
+      "_id": "507f1f77bcf86cd799439013",
+      "orderId": 5123456789,
+      "orderNumber": 1042,
+      "orderName": "#1042",
+      "orderSummary": {
+        "totalPrice": 299.99,
+        "subTotalPrice": 279.99,
+        "totalTax": 20.00,
+        "currency": "GBP"
+      },
+      "customer": {
+        "email": "customer@example.com",
+        "firstName": "Jane",
+        "lastName": "Doe"
+      },
+      "shippingAddress": {
+        "address1": "123 High Street",
+        "city": "London",
+        "province": "England",
+        "country": "United Kingdom",
+        "zip": "SW1A 1AA"
+      },
+      "status": "fulfilled",
+      "createdAt": "2024-06-15T10:30:00.000Z"
+    },
+    "lineItems": [
+      {
+        "_id": "507f1f77bcf86cd799439015",
+        "lineItemName": "Widget Pro - Large / Blue",
+        "quantity": 2,
+        "unitPrice": 139.99,
+        "vendorName": "Acme Supplies",
+        "fulfillmentStatus": "fulfilled"
+      }
+    ],
+    "timeline": [],
+    "vendorPayouts": [
+      {
+        "vendorId": "507f1f77bcf86cd799439011",
+        "vendorName": "Acme Supplies",
+        "sales": 279.99,
+        "commission": 39.20,
+        "payout": 240.79
+      }
+    ]
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Order not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/orders/507f1f77bcf86cd799439013" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```
