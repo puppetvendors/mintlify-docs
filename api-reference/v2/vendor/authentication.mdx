@@ -1,6 +1,6 @@
 ---
-title: "Merchant Authentication"
-description: "Authenticate with the PuppetVendors V2 API using a merchant API key"
+title: "Vendor Authentication"
+description: "Authenticate with the PuppetVendors V2 API using a vendor API key"
 ---
 
 <Note>
@@ -9,25 +9,25 @@ description: "Authenticate with the PuppetVendors V2 API using a merchant API ke
 
 ## Overview
 
-All V2 Merchant API endpoints require a JWT token passed via the `x-access-token` header. You obtain this token by exchanging your merchant API key at `POST /v2/authenticate`.
+All V2 Vendor API endpoints require a JWT token passed via the `x-access-token` header. You obtain this token by exchanging your vendor API key at `POST /v2/authenticate`.
 
-## Merchant API Key
+## Vendor API Key
 
-Your merchant (shop) API key is found in **Settings > Information** in the PuppetVendors dashboard.
+Your merchant assigns a vendor API key to your account. Vendor keys always start with the `vk_` prefix.
 
 | Key Type | Prefix | Token Scope | Where to Find |
 |----------|--------|-------------|---------------|
-| **Merchant key** | _(none)_ | `merchant` — full access | **Settings > Information** in the PuppetVendors dashboard |
+| **Vendor key** | `vk_` | `vendor` — your data only | Provided by your merchant |
 
 ## Authenticating
 
-Exchange your merchant API key for a JWT token:
+Exchange your vendor API key for a JWT token:
 
 ```bash
 curl -X POST https://api.puppetvendors.com/v2/authenticate \
   -H "Content-Type: application/json" \
   -d '{
-    "apiKey": "YOUR_MERCHANT_API_KEY"
+    "apiKey": "vk_YOUR_VENDOR_API_KEY"
   }'
 ```
 
@@ -39,7 +39,7 @@ curl -X POST https://api.puppetvendors.com/v2/authenticate \
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "expiresIn": 86400,
-    "scope": "merchant",
+    "scope": "vendor",
     "shopDomain": "my-store.myshopify.com"
   }
 }
@@ -50,7 +50,7 @@ curl -X POST https://api.puppetvendors.com/v2/authenticate \
 Include the token in all subsequent requests via the `x-access-token` header:
 
 ```bash
-curl -X GET "https://api.puppetvendors.com/v2/orders?first=10" \
+curl -X GET "https://api.puppetvendors.com/v2/vendor/orders?first=10" \
   -H "x-access-token: YOUR_JWT_TOKEN"
 ```
 
@@ -63,6 +63,6 @@ curl -X POST https://api.puppetvendors.com/v2/refresh-token \
   -H "x-access-token: YOUR_CURRENT_TOKEN"
 ```
 
-## Filtering by Vendor
+## Scope Behaviour
 
-Merchant tokens have access to all vendors. You can optionally filter by `vendorId` query parameter to see a specific vendor's data. Some endpoints (like fulfillments and payouts) **require** the `vendorId` parameter for merchant tokens.
+Vendor-scoped tokens automatically filter all data to your vendor account. For example, calling `GET /v2/vendor/orders` will only return orders containing your line items. Attempting to access another vendor's data returns HTTP 403.

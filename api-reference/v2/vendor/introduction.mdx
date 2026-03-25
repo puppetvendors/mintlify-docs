@@ -1,0 +1,67 @@
+---
+title: "V2 Vendor API Introduction"
+description: "Overview of the PuppetVendors V2 Vendor API (Alpha)"
+---
+
+<Note>
+  **V2 Alpha** — The V2 API is currently in preview. Breaking changes may occur before the stable release.
+</Note>
+
+## Overview
+
+The PuppetVendors V2 Vendor API gives vendors direct, secure access to their own data — orders, products, fulfillments, payouts, and more — without going through the merchant.
+
+Vendor-scoped tokens are automatically restricted to the authenticated vendor's data. There is no way for a vendor token to access another vendor's resources.
+
+**Base URL:** `https://api.puppetvendors.com/v2/vendor`
+
+## Getting Started
+
+1. **Get your vendor API key** — Your merchant assigns a vendor key (prefixed `vk_`) to your account
+2. **Authenticate** — Exchange your key for a JWT token via `POST /v2/authenticate`
+3. **Make requests** — Pass the token in the `x-access-token` header
+
+See the [Authentication guide](/api-reference/v2/vendor/authentication) for details.
+
+## Vendor Resources
+
+<CardGroup cols={2}>
+  <Card title="Orders" icon="cart-shopping" href="/api-reference/v2/endpoint/vendor-list-orders">
+    View and export your orders
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/v2/endpoint/vendor-list-products">
+    Create and manage your products
+  </Card>
+  <Card title="Fulfillments" icon="truck" href="/api-reference/v2/endpoint/vendor-list-fulfillments">
+    Create, update, and cancel fulfillments
+  </Card>
+  <Card title="Payouts" icon="money-bill-wave" href="/api-reference/v2/endpoint/vendor-list-payouts">
+    Track your payout history and balances
+  </Card>
+  <Card title="Dashboard" icon="gauge" href="/api-reference/v2/endpoint/vendor-get-dashboard">
+    Sales metrics, charts, and top products
+  </Card>
+  <Card title="Customers" icon="users" href="/api-reference/v2/endpoint/vendor-list-customers">
+    View customers who have purchased your products
+  </Card>
+  <Card title="Users" icon="user-group" href="/api-reference/v2/endpoint/vendor-list-users">
+    Manage your team's user accounts
+  </Card>
+  <Card title="Profile" icon="user" href="/api-reference/v2/endpoint/vendor-get-profile">
+    Update your vendor profile and address
+  </Card>
+  <Card title="Discounts" icon="tag" href="/api-reference/v2/endpoint/vendor-list-discounts">
+    Manage your discount codes
+  </Card>
+  <Card title="Integrations" icon="plug" href="/api-reference/v2/endpoint/vendor-get-shippo">
+    Connect Shippo, ShipStation, PayPal, and Stripe
+  </Card>
+</CardGroup>
+
+## Rate Limits
+
+The API is rate-limited to **100 requests per minute** per IP address. Exceeding this limit returns HTTP 429.
+
+## Need Help?
+
+Contact [support@puppetvendors.com](mailto:support@puppetvendors.com) for API access or questions.

@@ -1,6 +1,6 @@
 ---
 title: "Error Handling"
-description: "Standard error responses in the V2 Merchant API"
+description: "Standard error responses in the V2 Vendor API"
 ---
 
 <Note>
@@ -31,7 +31,7 @@ All V2 API endpoints return a consistent error format. Errors always include `su
 | **201** | Resource created |
 | **400** | Bad request — invalid parameters or missing required fields |
 | **401** | Unauthorized — missing, invalid, or expired token |
-| **403** | Forbidden — insufficient permissions for this operation |
+| **403** | Forbidden — accessing another vendor's data or a merchant-only endpoint |
 | **404** | Not found — resource does not exist |
 | **409** | Conflict — resource creation/update conflict |
 | **429** | Too many requests — rate limit exceeded |
@@ -41,17 +41,16 @@ All V2 API endpoints return a consistent error format. Errors always include `su
 
 | Code | HTTP Status | Description |
 |------|-------------|-------------|
-| `UNAUTHORIZED` | 401 | Invalid API key or expired token |
-| `FORBIDDEN` | 403 | Insufficient permissions for this operation |
+| `UNAUTHORIZED` | 401 | Invalid vendor API key or expired token |
+| `FORBIDDEN` | 403 | Attempting to access another vendor's data or a merchant-only endpoint |
 | `NOT_FOUND` | 404 | Requested resource not found |
 | `VALIDATION_ERROR` | 400 | Request body or query parameters failed validation |
-| `VENDOR_ID_REQUIRED` | 400 | Merchant token missing required `vendorId` parameter |
 | `FULFILLMENT_FAILED` | 400 | Fulfillment creation failed |
 | `CONFLICT` | 409 | Resource creation/update conflict |
 | `INTERNAL_ERROR` | 500 | Unexpected server error |
 
 <Note>
-  The `VENDOR_ID_REQUIRED` error is specific to merchant tokens. Some endpoints (like fulfillments and payouts) require a `vendorId` query parameter when using a merchant token to specify which vendor's data to access.
+  Vendor tokens are automatically scoped to your data. If you receive a **403 Forbidden** error, it usually means you are calling a merchant-only endpoint. Check that you are using the `/v2/vendor/*` routes.
 </Note>
 
 ## Validation Errors

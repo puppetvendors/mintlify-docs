@@ -1,6 +1,6 @@
 ---
-title: "Refresh Token (Merchant)"
-description: "Exchange a valid merchant token for a new one with extended expiry"
+title: "Refresh Token"
+description: "Exchange a valid vendor token for a new one with extended expiry"
 api: "POST /v2/refresh-token"
 ---
 
@@ -10,14 +10,14 @@ api: "POST /v2/refresh-token"
 
 ## Overview
 
-Exchange a valid (non-expired) merchant JWT token for a new one with a fresh 24-hour expiry. Use this to maintain sessions without requiring re-authentication with the API key.
+Exchange a valid (non-expired) vendor JWT token for a new one with a fresh 24-hour expiry. Use this to maintain sessions without requiring re-authentication with the API key.
 
-The new token inherits the `merchant` scope from the original.
+The new token inherits the `vendor` scope from the original.
 
 ### Use Cases
 
 - **Long-running integrations** — Automatically refresh tokens before they expire
-- **Session management** — Keep admin sessions alive
+- **Vendor portal sessions** — Keep your session alive without re-entering the API key
 
 ## Request
 
@@ -52,5 +52,5 @@ No request body required. The current token is read from the `x-access-token` he
 
 ```bash
 curl -X POST https://api.puppetvendors.com/v2/refresh-token \
-  -H "x-access-token: YOUR_MERCHANT_TOKEN"
+  -H "x-access-token: YOUR_VENDOR_TOKEN"
 ```

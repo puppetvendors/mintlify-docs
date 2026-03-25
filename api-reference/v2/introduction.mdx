@@ -1,6 +1,6 @@
 ---
-title: "V2 API Introduction"
-description: "Overview of the PuppetVendors V2 API (Alpha)"
+title: "V2 Merchant API Introduction"
+description: "Overview of the PuppetVendors V2 Merchant API (Alpha)"
 ---
 
 <Note>
@@ -9,7 +9,7 @@ description: "Overview of the PuppetVendors V2 API (Alpha)"
 
 ## Overview
 
-The PuppetVendors V2 API is a complete redesign of the public REST API, built for performance and flexibility. It introduces cursor-based pagination, dual authentication scopes, and standardised error handling.
+The PuppetVendors V2 Merchant API is a complete redesign of the public REST API, built for performance and flexibility. It introduces cursor-based pagination, dual authentication scopes, and standardised error handling.
 
 **Base URL:** `https://api.puppetvendors.com/v2`
 
@@ -28,10 +28,7 @@ The PuppetVendors V2 API is a complete redesign of the public REST API, built fo
 
 All V2 endpoints use JWT tokens obtained via `POST /v2/authenticate`. Tokens are passed in the `x-access-token` header.
 
-V2 supports two token scopes:
-
-- **Merchant** — Full access to all shop data and all vendors
-- **Vendor** — Scoped to a single vendor's data only
+Merchant tokens provide full access to all shop data and all vendors.
 
 See the [Authentication guide](/api-reference/v2/authentication) for details.
 
@@ -39,7 +36,7 @@ See the [Authentication guide](/api-reference/v2/authentication) for details.
 
 <CardGroup cols={2}>
   <Card title="Authentication" icon="key" href="/api-reference/v2/authentication">
-    JWT tokens with merchant and vendor scopes
+    JWT tokens with merchant scope
   </Card>
   <Card title="Vendors" icon="store" href="/api-reference/v2/endpoint/list-vendors">
     Full vendor CRUD with profile and address management
@@ -73,33 +70,6 @@ See the [Authentication guide](/api-reference/v2/authentication) for details.
   </Card>
   <Card title="Reports" icon="chart-line" href="/api-reference/v2/endpoint/get-vendor-report">
     Vendor sales reports with summaries
-  </Card>
-</CardGroup>
-
-## Vendor Portal
-
-The V2 API includes a dedicated **Vendor Portal API** (`/v2/vendor/*`) for vendor self-service operations. Vendor-scoped tokens are automatically restricted to the authenticated vendor's data.
-
-See the [Vendor Portal guide](/api-reference/v2/vendor-portal) for details.
-
-<CardGroup cols={2}>
-  <Card title="Vendor Orders" icon="cart-shopping" href="/api-reference/v2/endpoint/vendor-list-orders">
-    View and export vendor-specific orders
-  </Card>
-  <Card title="Vendor Products" icon="box" href="/api-reference/v2/endpoint/vendor-list-products">
-    Create and manage vendor products
-  </Card>
-  <Card title="Vendor Fulfillments" icon="truck" href="/api-reference/v2/endpoint/vendor-list-fulfillments">
-    Manage fulfillments and tracking
-  </Card>
-  <Card title="Vendor Dashboard" icon="chart-line" href="/api-reference/v2/endpoint/vendor-get-dashboard">
-    Sales metrics and analytics
-  </Card>
-  <Card title="Vendor Integrations" icon="plug" href="/api-reference/v2/endpoint/vendor-get-shippo">
-    Shipping and payment integrations
-  </Card>
-  <Card title="Vendor Profile" icon="user" href="/api-reference/v2/endpoint/vendor-get-profile">
-    Profile and address management
   </Card>
 </CardGroup>
 

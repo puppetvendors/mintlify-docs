@@ -1,6 +1,6 @@
 ---
-title: "Authenticate (Merchant)"
-description: "Exchange your merchant API key for a JWT token"
+title: "Authenticate"
+description: "Exchange your vendor API key for a JWT token"
 api: "POST /v2/authenticate"
 ---
 
@@ -10,30 +10,30 @@ api: "POST /v2/authenticate"
 
 ## Overview
 
-Authenticate using your merchant API key to obtain a JWT token with full access to all shop data and all vendors.
+Authenticate using your vendor API key to obtain a JWT token scoped to your vendor account.
 
-### Merchant API Key
+### Vendor API Key
 
 | Key Type | Prefix | Scope | Access |
 |----------|--------|-------|--------|
-| Merchant key | _(none)_ | `merchant` | Full access to all shop data and all vendors |
+| Vendor key | `vk_` | `vendor` | Limited to your own data only |
 
-Your merchant API key is found at **Settings > Information** in the PuppetVendors dashboard.
+Your vendor API key is assigned by your merchant. It always starts with the `vk_` prefix.
 
 ### Use Cases
 
-- **Backend integrations** — Sync orders, products, and vendor data with external systems
-- **Admin tools** — Build custom dashboards and management interfaces
+- **Vendor portal apps** — Secure, isolated access to your vendor data
+- **Custom integrations** — Sync your orders, products, and payouts with external systems
 - **Token rotation** — Re-authenticate when tokens expire (24h)
 
 ## Request Body
 
 <ParamField body="apiKey" type="string" required>
-  Your merchant API key. Found at **Settings > Information** in the PuppetVendors dashboard.
+  Your vendor API key (starts with `vk_`). Provided by your merchant.
 </ParamField>
 
 <ParamField body="shopDomain" type="string">
-  Your Shopify store domain (e.g. `my-store.myshopify.com`). Optional in V2 — the shop is resolved from the API key.
+  Your Shopify store domain (e.g. `my-store.myshopify.com`). Optional — the shop is resolved from the API key.
 </ParamField>
 
 ## Response
@@ -44,8 +44,8 @@ Your merchant API key is found at **Settings > Information** in the PuppetVendor
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "expiresIn": 86400,
-    "scope": "merchant",
-    "permissions": ["admin:users", "admin:vendors"],
+    "scope": "vendor",
+    "permissions": [],
     "shopDomain": "my-store.myshopify.com"
   }
 }
@@ -69,6 +69,6 @@ Your merchant API key is found at **Settings > Information** in the PuppetVendor
 curl -X POST https://api.puppetvendors.com/v2/authenticate \
   -H "Content-Type: application/json" \
   -d '{
-    "apiKey": "a1b2c3d4e5f6..."
+    "apiKey": "vk_x9y8z7w6v5u4..."
   }'
 ```

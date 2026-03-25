@@ -20,7 +20,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "API Reference",
+        "tab": "API V1",
         "groups": [
           {
             "group": "Getting Started",
@@ -102,7 +102,7 @@
         ]
       },
       {
-        "tab": "API V2 (Alpha)",
+        "tab": "API V2 - Merchant (Alpha)",
         "groups": [
           {
             "group": "Getting Started",
@@ -206,6 +206,27 @@
               "api-reference/v2/endpoint/get-vendor-report",
               "api-reference/v2/endpoint/get-vendor-report-summary"
             ]
+          }
+        ]
+      },
+      {
+        "tab": "API V2 - Vendor (Alpha)",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "api-reference/v2/vendor/introduction",
+              "api-reference/v2/vendor/authentication",
+              "api-reference/v2/vendor/pagination",
+              "api-reference/v2/vendor/errors"
+            ]
+          },
+          {
+            "group": "Authentication",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-authenticate",
+              "api-reference/v2/endpoint/vendor-refresh-token"
+            ]
           },
           {
             "group": "Vendor Portal",
@@ -214,21 +235,21 @@
             ]
           },
           {
-            "group": "Vendor Portal - Orders",
+            "group": "Orders",
             "pages": [
               "api-reference/v2/endpoint/vendor-list-orders",
               "api-reference/v2/endpoint/vendor-get-order"
             ]
           },
           {
-            "group": "Vendor Portal - Products",
+            "group": "Products",
             "pages": [
               "api-reference/v2/endpoint/vendor-list-products",
               "api-reference/v2/endpoint/vendor-create-product"
             ]
           },
           {
-            "group": "Vendor Portal - Fulfillments",
+            "group": "Fulfillments",
             "pages": [
               "api-reference/v2/endpoint/vendor-list-fulfillments",
               "api-reference/v2/endpoint/vendor-create-fulfillment",
@@ -237,14 +258,14 @@
             ]
           },
           {
-            "group": "Vendor Portal - Payouts",
+            "group": "Payouts",
             "pages": [
               "api-reference/v2/endpoint/vendor-list-payouts",
               "api-reference/v2/endpoint/vendor-get-payout"
             ]
           },
           {
-            "group": "Vendor Portal - Dashboard",
+            "group": "Dashboard",
             "pages": [
               "api-reference/v2/endpoint/vendor-get-dashboard",
               "api-reference/v2/endpoint/vendor-get-dashboard-chart",
@@ -252,13 +273,13 @@
             ]
           },
           {
-            "group": "Vendor Portal - Customers",
+            "group": "Customers",
             "pages": [
               "api-reference/v2/endpoint/vendor-list-customers"
             ]
           },
           {
-            "group": "Vendor Portal - Users",
+            "group": "Users",
             "pages": [
               "api-reference/v2/endpoint/vendor-list-users",
               "api-reference/v2/endpoint/vendor-create-user",
@@ -267,7 +288,7 @@
             ]
           },
           {
-            "group": "Vendor Portal - Profile",
+            "group": "Profile",
             "pages": [
               "api-reference/v2/endpoint/vendor-get-profile",
               "api-reference/v2/endpoint/vendor-update-profile",
@@ -276,7 +297,7 @@
             ]
           },
           {
-            "group": "Vendor Portal - Discounts",
+            "group": "Discounts",
             "pages": [
               "api-reference/v2/endpoint/vendor-list-discounts",
               "api-reference/v2/endpoint/vendor-create-discount",
@@ -285,7 +306,7 @@
             ]
           },
           {
-            "group": "Vendor Portal - Integrations",
+            "group": "Integrations",
             "pages": [
               "api-reference/v2/endpoint/vendor-get-shippo",
               "api-reference/v2/endpoint/vendor-update-shippo",

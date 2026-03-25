@@ -1,6 +1,6 @@
 ---
 title: "Pagination"
-description: "Cursor-based pagination in the V2 Merchant API"
+description: "Cursor-based pagination in the V2 Vendor API"
 ---
 
 <Note>
@@ -9,7 +9,7 @@ description: "Cursor-based pagination in the V2 Merchant API"
 
 ## Overview
 
-The V2 API uses **cursor-based pagination** (Relay-style) instead of V1's offset-based pagination. Cursors provide stable, consistent results even when data is being added or removed between requests.
+The V2 API uses **cursor-based pagination** (Relay-style) instead of offset-based pagination. Cursors provide stable, consistent results even when data is being added or removed between requests.
 
 ## Pagination Parameters
 
@@ -59,13 +59,13 @@ All paginated endpoints return a `pageInfo` object alongside the data:
 Fetch the first page, then use `endCursor` to get the next:
 
 ```bash
-# First page of orders across all vendors
-curl "https://api.puppetvendors.com/v2/orders?first=10" \
-  -H "x-access-token: YOUR_MERCHANT_TOKEN"
+# First page of your orders
+curl "https://api.puppetvendors.com/v2/vendor/orders?first=10" \
+  -H "x-access-token: YOUR_VENDOR_TOKEN"
 
 # Next page (use endCursor from previous response)
-curl "https://api.puppetvendors.com/v2/orders?first=10&after=eyJpZCI6IjY1YTF..." \
-  -H "x-access-token: YOUR_MERCHANT_TOKEN"
+curl "https://api.puppetvendors.com/v2/vendor/orders?first=10&after=eyJpZCI6IjY1YTF..." \
+  -H "x-access-token: YOUR_VENDOR_TOKEN"
 ```
 
 ## Backward Pagination
@@ -74,8 +74,8 @@ Use `last` and `before` to paginate backwards:
 
 ```bash
 # Last 10 items before a cursor
-curl "https://api.puppetvendors.com/v2/orders?last=10&before=eyJpZCI6IjY1YTF..." \
-  -H "x-access-token: YOUR_MERCHANT_TOKEN"
+curl "https://api.puppetvendors.com/v2/vendor/orders?last=10&before=eyJpZCI6IjY1YTF..." \
+  -H "x-access-token: YOUR_VENDOR_TOKEN"
 ```
 
 ## Full Iteration Example
@@ -86,16 +86,16 @@ let cursor = null;
 
 while (hasMore) {
   const url = cursor
-    ? `/v2/orders?first=50&after=${cursor}`
-    : '/v2/orders?first=50';
+    ? `/v2/vendor/orders?first=50&after=${cursor}`
+    : '/v2/vendor/orders?first=50';
 
   const response = await fetch(`https://api.puppetvendors.com${url}`, {
-    headers: { 'x-access-token': MERCHANT_TOKEN }
+    headers: { 'x-access-token': VENDOR_TOKEN }
   });
 
   const { data } = await response.json();
 
-  // Process data.orders
+  // Process your orders
   for (const order of data.orders) {
     console.log(order.orderName);
   }
