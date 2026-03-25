@@ -229,12 +229,6 @@
             ]
           },
           {
-            "group": "Vendor Portal",
-            "pages": [
-              "api-reference/v2/vendor-portal"
-            ]
-          },
-          {
             "group": "Orders",
             "pages": [
               "api-reference/v2/endpoint/vendor-list-orders",
