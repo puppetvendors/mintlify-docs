@@ -1,0 +1,118 @@
+---
+title: "List Orders"
+description: "Retrieve orders with cursor-based pagination and filters"
+api: "GET /v2/orders"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of orders. Vendor tokens are automatically scoped to orders containing their line items. Merchant tokens can optionally filter by vendor.
+
+### Use Cases
+
+- **Sync orders** to an external OMS, ERP, or accounting tool
+- **Build dashboards** showing recent order activity
+- **Monitor vendor orders** with vendor-scoped tokens
+
+## Query Parameters
+
+<ParamField query="vendorId" type="string">
+  Filter by vendor ObjectId. Vendor tokens are auto-scoped and cannot override this.
+</ParamField>
+
+<ParamField query="locationId" type="integer">
+  Filter by Shopify location ID.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by status. One of: `pending`, `partial`, `fulfilled`, `onHold`, `error`, `cancelled`.
+</ParamField>
+
+<ParamField query="fulfillmentStatus" type="string">
+  Filter by fulfillment status. One of: `pending`, `success`, `error`, `onHold`.
+</ParamField>
+
+<ParamField query="startDate" type="string">
+  Filter by date (minimum, ISO 8601). Example: `2024-01-01T00:00:00Z`.
+</ParamField>
+
+<ParamField query="endDate" type="string">
+  Filter by date (maximum, ISO 8601).
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search in order name/number (max 200 characters).
+</ParamField>
+
+<ParamField query="sortBy" type="string" default="createdAt">
+  Sort field. One of: `createdAt`, `orderId`, `orderNumber`, `shipDate`, `deliveryDate`, `totalSales`, `totalPayout`.
+</ParamField>
+
+<ParamField query="sortOrder" type="string" default="desc">
+  Sort direction. One of: `asc`, `desc`.
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1–100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1–100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "orders": [
+      {
+        "_id": "507f1f77bcf86cd799439013",
+        "orderId": 5123456789,
+        "orderNumber": 1042,
+        "orderName": "#1042",
+        "orderSummary": {
+          "totalPrice": 299.99,
+          "subTotalPrice": 279.99,
+          "totalTax": 20.00,
+          "currency": "GBP"
+        },
+        "customer": {
+          "email": "customer@example.com",
+          "firstName": "Jane",
+          "lastName": "Doe"
+        },
+        "status": "fulfilled",
+        "createdAt": "2024-06-15T10:30:00.000Z"
+      }
+    ],
+    "totalCount": 350,
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMyJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAyMCJ9"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/orders?first=20&status=fulfilled" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

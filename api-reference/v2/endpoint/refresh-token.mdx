@@ -1,0 +1,56 @@
+---
+title: "Refresh Token"
+description: "Exchange a valid token for a new one with extended expiry"
+api: "POST /v2/refresh-token"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Exchange a valid (non-expired) JWT token for a new one with a fresh 24-hour expiry. Use this to maintain sessions without requiring re-authentication with the API key.
+
+The new token inherits the same scope (merchant or vendor) as the original.
+
+### Use Cases
+
+- **Long-running integrations** — Automatically refresh tokens before they expire
+- **Session management** — Keep vendor portal sessions alive
+
+## Request
+
+No request body required. The current token is read from the `x-access-token` header.
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 86400,
+    "shopDomain": "my-store.myshopify.com"
+  }
+}
+```
+
+### Error Response
+
+```json 401
+{
+  "success": false,
+  "error": {
+    "message": "Invalid or expired token",
+    "code": "UNAUTHORIZED"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/refresh-token \
+  -H "x-access-token: YOUR_CURRENT_TOKEN"
+```

@@ -1,0 +1,90 @@
+---
+title: "Authentication"
+description: "Authenticate with the PuppetVendors V2 API using JWT tokens"
+---
+
+<Note>
+  **V2 Alpha** — This authentication flow is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+All V2 API endpoints require a JWT token passed via the `x-access-token` header. You obtain this token by exchanging your API key at `POST /v2/authenticate`.
+
+## API Key Types
+
+V2 uses two types of API keys. The key type determines the token scope automatically — just pass the key, no extra parameters needed.
+
+| Key Type | Prefix | Token Scope | Where to Find |
+|----------|--------|-------------|---------------|
+| **Merchant key** | _(none)_ | `merchant` — full access | **Settings > Information** in the PuppetVendors dashboard |
+| **Vendor key** | `vk_` | `vendor` — single vendor only | Assigned per vendor by the merchant |
+
+## Token Scopes
+
+| Scope | Access | Use Case |
+|-------|--------|----------|
+| **merchant** | Full access to all shop data and all vendors | Backend integrations, admin tools |
+| **vendor** | Limited to a single vendor's data | Vendor portal, vendor-specific apps |
+
+### Merchant Token
+
+Authenticate with a merchant (shop) API key:
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/authenticate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "YOUR_MERCHANT_API_KEY"
+  }'
+```
+
+### Vendor Token
+
+Authenticate with a vendor API key (starts with `vk_`):
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/authenticate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "vk_YOUR_VENDOR_API_KEY"
+  }'
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 86400,
+    "scope": "merchant",
+    "shopDomain": "my-store.myshopify.com"
+  }
+}
+```
+
+## Using the Token
+
+Include the token in all subsequent requests via the `x-access-token` header:
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/orders?first=10" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```
+
+## Token Expiry & Refresh
+
+Tokens expire after **24 hours** (86400 seconds). Use `POST /v2/refresh-token` with a valid (non-expired) token to get a new one without re-authenticating:
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/refresh-token \
+  -H "x-access-token: YOUR_CURRENT_TOKEN"
+```
+
+## Scope Behaviour
+
+Vendor-scoped tokens automatically filter data. For example, a vendor token calling `GET /v2/orders` will only return orders containing that vendor's line items. Attempting to access another vendor's data returns HTTP 403.
+
+Merchant tokens can optionally filter by `vendorId` query parameter to see a specific vendor's data, and some endpoints (like fulfillments and payouts) **require** the `vendorId` parameter for merchant tokens.

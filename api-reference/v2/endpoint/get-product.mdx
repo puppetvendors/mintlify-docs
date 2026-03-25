@@ -1,0 +1,75 @@
+---
+title: "Get Product"
+description: "Retrieve a single product by ID"
+api: "GET /v2/products/{productId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve detailed information for a single product, including variants, images, and inventory. Vendor tokens can only access their own products.
+
+### Use Cases
+
+- **Product detail pages** — Display full product info in custom UIs
+- **Inventory checks** — Verify stock before fulfilling orders
+- **Data sync** — Pull individual product data for external systems
+
+## Path Parameters
+
+<ParamField path="productId" type="string" required>
+  The product's MongoDB ObjectId.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "_id": "507f1f77bcf86cd799439013",
+    "productId": 7654321098765,
+    "graphqlProductId": "gid://shopify/Product/7654321098765",
+    "title": "Widget Pro",
+    "handle": "widget-pro",
+    "descriptionHtml": "<p>Premium widget with advanced features.</p>",
+    "productType": "Widgets",
+    "vendor": "Acme Supplies",
+    "vendorId": "507f1f77bcf86cd799439011",
+    "status": "active",
+    "tags": ["bestseller", "new-arrival"],
+    "totalInventory": 150,
+    "images": [
+      {
+        "id": "gid://shopify/ProductImage/123",
+        "src": "https://cdn.shopify.com/...",
+        "altText": "Widget Pro front view"
+      }
+    ],
+    "createdAt": "2024-03-10T08:00:00.000Z",
+    "updatedAt": "2024-06-15T14:30:00.000Z"
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Product not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/products/507f1f77bcf86cd799439013" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

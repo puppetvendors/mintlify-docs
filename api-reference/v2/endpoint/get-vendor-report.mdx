@@ -1,0 +1,106 @@
+---
+title: "Get Vendor Report"
+description: "Retrieve a paginated sales report for a vendor"
+api: "GET /v2/reports/{vendorId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated report of line-item-level sales data for a specific vendor. Includes order details, pricing, commission, deductions, and payout amounts. Vendor tokens can only access their own reports.
+
+### Use Cases
+
+- **Vendor sales reports** — Display detailed earnings breakdowns
+- **Commission auditing** — Verify commission calculations per line item
+- **Export to accounting** — Pull structured data for bookkeeping
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's MongoDB ObjectId.
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="dateStart" type="string">
+  Filter by start date (ISO 8601).
+</ParamField>
+
+<ParamField query="dateEnd" type="string">
+  Filter by end date (ISO 8601).
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1–100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1–100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "_id": "507f1f77bcf86cd799439025",
+        "orderNumber": 1042,
+        "orderName": "#1042",
+        "orderDate": "2024-06-15T10:30:00.000Z",
+        "lineItemName": "Widget Pro - Large / Blue",
+        "lineItemSku": "WP-LG-BL",
+        "quantity": 2,
+        "unitPrice": 139.99,
+        "netSales": 279.99,
+        "commission": 39.20,
+        "deduction": 0,
+        "payout": 240.79,
+        "paid": 0,
+        "balance": 240.79,
+        "status": "unpaid"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAyNSJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAzNSJ9",
+      "totalCount": 320
+    }
+  }
+}
+```
+
+### Error Response
+
+```json 403
+{
+  "success": false,
+  "error": {
+    "message": "Vendor tokens can only access their own reports",
+    "code": "FORBIDDEN"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/reports/507f1f77bcf86cd799439011?dateStart=2024-01-01T00:00:00Z&first=50" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

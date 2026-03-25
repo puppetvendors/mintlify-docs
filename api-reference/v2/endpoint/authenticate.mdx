@@ -1,0 +1,94 @@
+---
+title: "Authenticate"
+description: "Exchange your API key for a JWT token"
+api: "POST /v2/authenticate"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Authenticate using your API key to obtain a JWT token. The **key type** determines the token scope — no additional parameters needed.
+
+### Token Scopes
+
+| Key Type | Prefix | Scope | Access |
+|----------|--------|-------|--------|
+| Merchant key | _(none)_ | `merchant` | Full access to all shop data and all vendors |
+| Vendor key | `vk_` | `vendor` | Limited to the vendor's own data only |
+
+### Use Cases
+
+- **Backend integrations** — Use a merchant key for full shop access
+- **Vendor apps** — Use a vendor key for secure, isolated access to a single vendor's data
+- **Token rotation** — Re-authenticate when tokens expire (24h)
+
+## Request Body
+
+<ParamField body="apiKey" type="string" required>
+  Your API key. Merchant keys are found at **Settings > Information** in the PuppetVendors dashboard. Vendor keys start with `vk_` and are assigned per vendor.
+</ParamField>
+
+<ParamField body="shopDomain" type="string">
+  Your Shopify store domain (e.g. `my-store.myshopify.com`). Optional in V2 — the shop is resolved from the API key.
+</ParamField>
+
+## Response
+
+```json 200 Merchant token
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 86400,
+    "scope": "merchant",
+    "permissions": ["admin:users", "admin:vendors"],
+    "shopDomain": "my-store.myshopify.com"
+  }
+}
+```
+
+```json 200 Vendor token
+{
+  "success": true,
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "expiresIn": 86400,
+    "scope": "vendor",
+    "permissions": [],
+    "shopDomain": "my-store.myshopify.com"
+  }
+}
+```
+
+### Error Responses
+
+```json 401
+{
+  "success": false,
+  "error": {
+    "message": "Invalid API key",
+    "code": "UNAUTHORIZED"
+  }
+}
+```
+
+## Example
+
+```bash
+# Merchant token (shop API key)
+curl -X POST https://api.puppetvendors.com/v2/authenticate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "a1b2c3d4e5f6..."
+  }'
+
+# Vendor token (vendor API key with vk_ prefix)
+curl -X POST https://api.puppetvendors.com/v2/authenticate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "vk_x9y8z7w6v5u4..."
+  }'
+```

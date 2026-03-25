@@ -1,0 +1,67 @@
+---
+title: "V2 API Introduction"
+description: "Overview of the PuppetVendors V2 API (Alpha)"
+---
+
+<Note>
+  **V2 Alpha** — The V2 API is currently in preview. Breaking changes may occur before the stable release.
+</Note>
+
+## Overview
+
+The PuppetVendors V2 API is a complete redesign of the public REST API, built for performance and flexibility. It introduces cursor-based pagination, dual authentication scopes, and standardised error handling.
+
+**Base URL:** `https://api.puppetvendors.com/v2`
+
+## What's New in V2
+
+| Feature | V1 | V2 |
+|---------|----|----|
+| **Pagination** | Offset-based (page/limit) | Cursor-based (Relay-style `first`/`after`/`last`/`before`) |
+| **Auth Scopes** | Single merchant token | Merchant **and** vendor-scoped tokens |
+| **Error Format** | Varied | Consistent `{ success, error: { message, code } }` |
+| **Fulfillments** | Create only | Full CRUD (create, update, cancel) |
+| **Products** | Read only | Full CRUD (create, update, delete) |
+| **Reports** | Single endpoint | Paginated detail + summary |
+
+## Authentication
+
+All V2 endpoints use JWT tokens obtained via `POST /v2/authenticate`. Tokens are passed in the `x-access-token` header.
+
+V2 supports two token scopes:
+
+- **Merchant** — Full access to all shop data and all vendors
+- **Vendor** — Scoped to a single vendor's data only
+
+See the [Authentication guide](/api-reference/v2/authentication) for details.
+
+## Resources
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/api-reference/v2/authentication">
+    JWT tokens with merchant and vendor scopes
+  </Card>
+  <Card title="Orders" icon="cart-shopping" href="/api-reference/v2/endpoint/list-orders">
+    Retrieve orders with cursor-based pagination
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/v2/endpoint/list-products">
+    Full product CRUD with Shopify sync
+  </Card>
+  <Card title="Fulfillments" icon="truck" href="/api-reference/v2/endpoint/list-fulfillments">
+    Create, update, and cancel fulfillments
+  </Card>
+  <Card title="Payouts" icon="money-bill-wave" href="/api-reference/v2/endpoint/list-payouts">
+    Track vendor payout balances
+  </Card>
+  <Card title="Reports" icon="chart-line" href="/api-reference/v2/endpoint/get-vendor-report">
+    Vendor sales reports with summaries
+  </Card>
+</CardGroup>
+
+## Rate Limits
+
+The API is rate-limited to **100 requests per minute** per IP address. Exceeding this limit returns HTTP 429.
+
+## Need Help?
+
+Contact [support@puppetvendors.com](mailto:support@puppetvendors.com) for API access or questions.
