@@ -1,0 +1,102 @@
+---
+title: "Vendor List Orders"
+description: "Retrieve vendor-scoped orders with cursor-based pagination"
+api: "GET /v2/vendor/orders"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of orders scoped to the authenticated vendor. Only orders containing line items belonging to the vendor are returned. Results include order totals, customer info, and fulfillment status for each order.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Vendor order dashboards** — Display a vendor's recent order activity
+- **Order sync** — Pull vendor orders into an external OMS or ERP system
+- **Reporting** — Build custom reports on vendor sales and fulfillment
+
+## Query Parameters
+
+<ParamField query="locationId" type="integer">
+  Filter by Shopify location ID.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by financial status. One of: `pending`, `authorized`, `paid`, `partially_paid`, `refunded`, `voided`, `partially_refunded`.
+</ParamField>
+
+<ParamField query="createdAtMin" type="string">
+  Filter by order creation date (minimum, ISO 8601). Example: `2024-01-01T00:00:00Z`.
+</ParamField>
+
+<ParamField query="createdAtMax" type="string">
+  Filter by order creation date (maximum, ISO 8601).
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search in order name/number (max 200 characters).
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1-100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1-100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "orders": [
+      {
+        "_id": "507f1f77bcf86cd799439013",
+        "orderId": 5123456789,
+        "orderNumber": 1042,
+        "orderName": "#1042",
+        "customer": {
+          "email": "customer@example.com",
+          "firstName": "Jane",
+          "lastName": "Doe"
+        },
+        "totalSales": 279.99,
+        "totalPayout": 240.79,
+        "fulfillmentStatus": "fulfilled",
+        "createdAt": "2024-06-15T10:30:00.000Z"
+      }
+    ],
+    "totalCount": 150,
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMyJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAyMCJ9"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/orders?first=20&status=paid" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

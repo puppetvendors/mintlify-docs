@@ -1,0 +1,96 @@
+---
+title: "Create Discount"
+description: "Create a new discount code"
+api: "POST /v2/discounts"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Create a new discount code. Both merchant and vendor tokens are accepted. Vendor tokens automatically associate the discount with the authenticated vendor. The discount code must be unique within the shop.
+
+### Use Cases
+
+- **Launch promotions** from a merchant or vendor dashboard
+- **Automate discount creation** from marketing campaigns or external tools
+- **Schedule time-limited offers** with start and end dates
+
+## Request Body
+
+<ParamField body="code" type="string" required>
+  Discount code for checkout. Must be unique within the shop.
+</ParamField>
+
+<ParamField body="title" type="string" required>
+  Internal title or description for the discount.
+</ParamField>
+
+<ParamField body="startsAt" type="string">
+  Start date (ISO 8601). Defaults to immediately if omitted.
+</ParamField>
+
+<ParamField body="endsAt" type="string">
+  End date (ISO 8601). Discount does not expire if omitted.
+</ParamField>
+
+<ParamField body="customerGets" type="object">
+  Discount value configuration (e.g., percentage or fixed amount).
+</ParamField>
+
+<ParamField body="usageLimit" type="integer">
+  Maximum total number of uses for this discount.
+</ParamField>
+
+<ParamField body="appliesOncePerCustomer" type="boolean">
+  Limit to one use per customer.
+</ParamField>
+
+## Response
+
+```json 201
+{
+  "success": true,
+  "data": {
+    "discount": {
+      "_id": "507f1f77bcf86cd799439030",
+      "code": "SUMMER20",
+      "title": "Summer Sale 20% Off",
+      "status": "active",
+      "startsAt": "2024-06-01T00:00:00.000Z",
+      "endsAt": "2024-08-31T23:59:59.000Z",
+      "usageLimit": 200,
+      "appliesOncePerCustomer": true,
+      "createdAt": "2024-05-28T09:00:00.000Z"
+    }
+  }
+}
+```
+
+### Error Response
+
+```json 409
+{
+  "success": false,
+  "error": "Conflict: a discount with code 'SUMMER20' already exists"
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/discounts \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "code": "SUMMER20",
+    "title": "Summer Sale 20% Off",
+    "startsAt": "2024-06-01T00:00:00Z",
+    "endsAt": "2024-08-31T23:59:59Z",
+    "customerGets": { "percentage": 20 },
+    "usageLimit": 200,
+    "appliesOncePerCustomer": true
+  }'
+```

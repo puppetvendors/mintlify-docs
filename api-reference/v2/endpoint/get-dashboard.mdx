@@ -1,0 +1,66 @@
+---
+title: "Get Dashboard"
+description: "Retrieve aggregated dashboard metrics for a date range"
+api: "GET /v2/dashboard"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve aggregated dashboard metrics including order totals, revenue, payouts, and fulfillment rates. Both merchant and vendor tokens are accepted. Vendor tokens are automatically scoped to the authenticated vendor's data. Merchant tokens can optionally filter by vendor using the `vendorId` parameter.
+
+### Use Cases
+
+- **Build analytics dashboards** with key performance indicators
+- **Monitor vendor performance** with merchant-scoped queries
+- **Track revenue and fulfillment** trends over date ranges
+
+## Query Parameters
+
+<ParamField query="dateStart" type="string">
+  Start of date range (ISO 8601). Example: `2024-01-01T00:00:00Z`.
+</ParamField>
+
+<ParamField query="dateEnd" type="string">
+  End of date range (ISO 8601). Example: `2024-06-30T23:59:59Z`.
+</ParamField>
+
+<ParamField query="vendorId" type="string">
+  Filter by vendor ObjectId. Merchant tokens only. Vendor tokens are auto-scoped and cannot override this.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "totalOrders": 1250,
+    "totalRevenue": 87450.00,
+    "totalPayouts": 72500.00,
+    "pendingPayouts": 4950.00,
+    "productsCount": 342,
+    "fulfillmentRate": 94.5,
+    "avgOrderValue": 69.96
+  }
+}
+```
+
+### Error Response
+
+```json 403
+{
+  "success": false,
+  "error": "Forbidden: vendor tokens cannot query other vendors"
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/dashboard?dateStart=2024-01-01T00:00:00Z&dateEnd=2024-06-30T23:59:59Z" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

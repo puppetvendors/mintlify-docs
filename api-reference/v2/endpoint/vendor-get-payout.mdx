@@ -1,0 +1,93 @@
+---
+title: "Vendor Get Payout"
+description: "Retrieve a single payout transaction with item details"
+api: "GET /v2/vendor/payouts/{payoutId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve detailed information for a single payout transaction belonging to the authenticated vendor. The response includes the transaction summary, status, payment method, and a breakdown of individual line items included in the payout.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Payout detail view** — Display a full payout breakdown in a vendor portal
+- **Invoice generation** — Pull payout details for creating vendor invoices
+- **Payment verification** — Confirm payout amounts and line item breakdown
+
+## Path Parameters
+
+<ParamField path="payoutId" type="string" required>
+  The payout transaction's MongoDB ObjectId.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "transaction": {
+      "_id": "507f1f77bcf86cd799439050",
+      "transactionId": "TXN-2024-001042",
+      "status": "paid",
+      "amount": 1250.75,
+      "currency": "GBP",
+      "itemCount": 12,
+      "paymentMethod": "stripe",
+      "processedAt": "2024-06-20T14:00:00.000Z",
+      "createdAt": "2024-06-15T10:30:00.000Z"
+    },
+    "items": [
+      {
+        "_id": "507f1f77bcf86cd799439060",
+        "orderNumber": 1042,
+        "orderName": "#1042",
+        "lineItemName": "Widget Pro - Large / Blue",
+        "lineItemSku": "WP-LG-BL",
+        "quantity": 2,
+        "sales": 279.99,
+        "commission": 39.20,
+        "payout": 240.79
+      },
+      {
+        "_id": "507f1f77bcf86cd799439061",
+        "orderNumber": 1043,
+        "orderName": "#1043",
+        "lineItemName": "Widget Mini - Red",
+        "lineItemSku": "WM-RD",
+        "quantity": 5,
+        "sales": 149.95,
+        "commission": 21.00,
+        "payout": 128.95
+      }
+    ]
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Payout not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/payouts/507f1f77bcf86cd799439050" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

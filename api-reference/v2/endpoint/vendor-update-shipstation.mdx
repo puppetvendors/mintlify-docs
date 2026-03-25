@@ -1,0 +1,50 @@
+---
+title: "Update ShipStation Integration"
+description: "Configure or update the vendor's ShipStation integration"
+api: "PUT /v2/vendor/integrations/shipstation"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Set or update the ShipStation API credentials for order sync and shipping automation.
+
+## Request Body
+
+<ParamField body="apiKey" type="string" required>
+  ShipStation API key.
+</ParamField>
+
+<ParamField body="apiSecret" type="string" required>
+  ShipStation API secret.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "type": "shipstation",
+      "connected": true,
+      "updatedAt": "2024-06-15T10:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT https://api.puppetvendors.com/v2/vendor/integrations/shipstation \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "apiKey": "abc123def456",
+    "apiSecret": "secret789xyz"
+  }'
+```

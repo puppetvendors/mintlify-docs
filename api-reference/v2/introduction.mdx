@@ -35,11 +35,14 @@ V2 supports two token scopes:
 
 See the [Authentication guide](/api-reference/v2/authentication) for details.
 
-## Resources
+## Merchant Resources
 
 <CardGroup cols={2}>
   <Card title="Authentication" icon="key" href="/api-reference/v2/authentication">
     JWT tokens with merchant and vendor scopes
+  </Card>
+  <Card title="Vendors" icon="store" href="/api-reference/v2/endpoint/list-vendors">
+    Full vendor CRUD with profile and address management
   </Card>
   <Card title="Orders" icon="cart-shopping" href="/api-reference/v2/endpoint/list-orders">
     Retrieve orders with cursor-based pagination
@@ -51,10 +54,52 @@ See the [Authentication guide](/api-reference/v2/authentication) for details.
     Create, update, and cancel fulfillments
   </Card>
   <Card title="Payouts" icon="money-bill-wave" href="/api-reference/v2/endpoint/list-payouts">
-    Track vendor payout balances
+    Track vendor payout balances and summaries
+  </Card>
+  <Card title="Commissions" icon="percent" href="/api-reference/v2/endpoint/list-vendor-commissions">
+    Vendor and SKU-level commission management
+  </Card>
+  <Card title="Dashboard" icon="gauge" href="/api-reference/v2/endpoint/get-dashboard">
+    Aggregated sales and fulfillment metrics
+  </Card>
+  <Card title="Customers" icon="users" href="/api-reference/v2/endpoint/list-customers">
+    Customer directory with vendor scoping
+  </Card>
+  <Card title="Discounts" icon="tag" href="/api-reference/v2/endpoint/list-discounts">
+    Discount code management
+  </Card>
+  <Card title="Line Items" icon="list" href="/api-reference/v2/endpoint/bulk-update-lineitems">
+    Bulk line item updates
   </Card>
   <Card title="Reports" icon="chart-line" href="/api-reference/v2/endpoint/get-vendor-report">
     Vendor sales reports with summaries
+  </Card>
+</CardGroup>
+
+## Vendor Portal
+
+The V2 API includes a dedicated **Vendor Portal API** (`/v2/vendor/*`) for vendor self-service operations. Vendor-scoped tokens are automatically restricted to the authenticated vendor's data.
+
+See the [Vendor Portal guide](/api-reference/v2/vendor-portal) for details.
+
+<CardGroup cols={2}>
+  <Card title="Vendor Orders" icon="cart-shopping" href="/api-reference/v2/endpoint/vendor-list-orders">
+    View and export vendor-specific orders
+  </Card>
+  <Card title="Vendor Products" icon="box" href="/api-reference/v2/endpoint/vendor-list-products">
+    Create and manage vendor products
+  </Card>
+  <Card title="Vendor Fulfillments" icon="truck" href="/api-reference/v2/endpoint/vendor-list-fulfillments">
+    Manage fulfillments and tracking
+  </Card>
+  <Card title="Vendor Dashboard" icon="chart-line" href="/api-reference/v2/endpoint/vendor-get-dashboard">
+    Sales metrics and analytics
+  </Card>
+  <Card title="Vendor Integrations" icon="plug" href="/api-reference/v2/endpoint/vendor-get-shippo">
+    Shipping and payment integrations
+  </Card>
+  <Card title="Vendor Profile" icon="user" href="/api-reference/v2/endpoint/vendor-get-profile">
+    Profile and address management
   </Card>
 </CardGroup>
 

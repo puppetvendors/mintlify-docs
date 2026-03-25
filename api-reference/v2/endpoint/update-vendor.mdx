@@ -1,0 +1,106 @@
+---
+title: "Update Vendor"
+description: "Update an existing vendor's details"
+api: "PUT /v2/vendors/{vendorId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update one or more fields on an existing vendor. All body fields are optional; only provided fields will be updated. The vendor name and alias must remain unique within the shop.
+
+### Use Cases
+
+- **Commission adjustments** — Update a vendor's commission rate or type
+- **Vendor management** — Change vendor names, aliases, or contact emails
+- **Visibility control** — Hide or unhide vendors from the marketplace
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's MongoDB ObjectId.
+</ParamField>
+
+## Request Body
+
+<ParamField body="vendorName" type="string">
+  Vendor display name (1-200 characters). Must be unique within the shop.
+</ParamField>
+
+<ParamField body="vendorNameAlias" type="string">
+  URL-friendly alias (max 200 characters). Must be unique within the shop.
+</ParamField>
+
+<ParamField body="commissionType" type="string">
+  Commission type. One of: `percentage`, `flat`.
+</ParamField>
+
+<ParamField body="commissionAmount" type="number">
+  Commission amount (minimum 0). Interpreted as a percentage or flat amount depending on `commissionType`.
+</ParamField>
+
+<ParamField body="reportingEmail" type="string">
+  Email address for vendor reports and notifications. Must be a valid email format.
+</ParamField>
+
+<ParamField body="isHidden" type="boolean">
+  Set to `true` to hide the vendor, `false` to make them visible.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "vendor": {
+      "_id": "507f1f77bcf86cd799439011",
+      "vendorName": "Acme Supplies Updated",
+      "vendorNameAlias": "acme-supplies",
+      "commissionType": "percentage",
+      "commissionAmount": 12,
+      "reportingEmail": "new-reports@acmesupplies.com",
+      "isHidden": false,
+      "createdAt": "2024-03-10T08:00:00.000Z",
+      "updatedAt": "2024-06-15T14:00:00.000Z"
+    }
+  }
+}
+```
+
+### Error Responses
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Vendor not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+```json 409
+{
+  "success": false,
+  "error": {
+    "message": "A vendor with this name or alias already exists",
+    "code": "CONFLICT"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT https://api.puppetvendors.com/v2/vendors/507f1f77bcf86cd799439011 \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "commissionAmount": 12,
+    "reportingEmail": "new-reports@acmesupplies.com"
+  }'
+```

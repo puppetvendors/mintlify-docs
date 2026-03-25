@@ -1,0 +1,41 @@
+---
+title: "Get Shippo Integration"
+description: "Retrieve the vendor's Shippo shipping integration"
+api: "GET /v2/vendor/integrations/shippo"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve the Shippo integration configuration for the authenticated vendor. API keys are returned masked for security.
+
+### Use Cases
+
+- **Check integration status** in vendor settings
+- **Verify Shippo connection** before fulfillment automation
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "type": "shippo",
+      "connected": true,
+      "apiKey": "shippo_test_****...****abc1",
+      "updatedAt": "2024-05-01T08:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/integrations/shippo" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

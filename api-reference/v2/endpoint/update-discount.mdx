@@ -1,0 +1,89 @@
+---
+title: "Update Discount"
+description: "Update an existing discount code"
+api: "PUT /v2/discounts/{discountId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update an existing discount code by its ID. Both merchant and vendor tokens are accepted. Vendor tokens can only update discounts belonging to the authenticated vendor. Only the fields provided in the request body are updated; omitted fields remain unchanged.
+
+### Use Cases
+
+- **Extend or shorten** a promotion's end date
+- **Disable a discount** without deleting it
+- **Update the title** for internal tracking
+
+## Path Parameters
+
+<ParamField path="discountId" type="string" required>
+  The ObjectId of the discount to update.
+</ParamField>
+
+## Request Body
+
+<ParamField body="title" type="string">
+  Updated internal title or description.
+</ParamField>
+
+<ParamField body="endsAt" type="string">
+  Updated end date (ISO 8601). Set to `null` to remove the expiration.
+</ParamField>
+
+<ParamField body="status" type="string">
+  Updated status. One of: `active`, `expired`, `disabled`.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "discount": {
+      "_id": "507f1f77bcf86cd799439030",
+      "code": "SUMMER20",
+      "title": "Summer Sale Extended",
+      "status": "active",
+      "startsAt": "2024-06-01T00:00:00.000Z",
+      "endsAt": "2024-09-30T23:59:59.000Z",
+      "usageCount": 42,
+      "usageLimit": 200,
+      "appliesOncePerCustomer": true,
+      "updatedAt": "2024-07-15T12:00:00.000Z"
+    }
+  }
+}
+```
+
+### Error Responses
+
+```json 404
+{
+  "success": false,
+  "error": "Discount not found"
+}
+```
+
+```json 409
+{
+  "success": false,
+  "error": "Conflict: cannot reactivate an expired discount"
+}
+```
+
+## Example
+
+```bash
+curl -X PUT https://api.puppetvendors.com/v2/discounts/507f1f77bcf86cd799439030 \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "title": "Summer Sale Extended",
+    "endsAt": "2024-09-30T23:59:59Z"
+  }'
+```

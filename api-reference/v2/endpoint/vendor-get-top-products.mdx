@@ -1,0 +1,93 @@
+---
+title: "Get Top Products"
+description: "Retrieve top performing products by quantity sold"
+api: "GET /v2/vendor/dashboard/products/top"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of top performing products for the authenticated vendor, ranked by quantity sold. Each item includes the product name, variant, SKU, and total revenue generated.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Identify best sellers** on a vendor analytics dashboard
+- **Monitor product performance** over a specific date range
+
+## Query Parameters
+
+<ParamField query="dateStart" type="string">
+  Filter by date (minimum, ISO 8601).
+</ParamField>
+
+<ParamField query="dateEnd" type="string">
+  Filter by date (maximum, ISO 8601).
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1-100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1-100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "_id": "507f1f77bcf86cd799439011",
+        "productName": "Premium Cotton T-Shirt",
+        "variant": "Large / Black",
+        "sku": "PCT-LG-BLK",
+        "productId": 8123456789,
+        "variantId": 4512345678,
+        "quantitySold": 142,
+        "totalRevenue": 4260.00
+      },
+      {
+        "_id": "507f1f77bcf86cd799439012",
+        "productName": "Premium Cotton T-Shirt",
+        "variant": "Medium / White",
+        "sku": "PCT-MD-WHT",
+        "productId": 8123456789,
+        "variantId": 4512345679,
+        "quantitySold": 98,
+        "totalRevenue": 2940.00
+      }
+    ],
+    "paginationMeta": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMiJ9"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/dashboard/products/top?dateStart=2024-01-01T00:00:00Z&dateEnd=2024-06-30T23:59:59Z&first=10" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

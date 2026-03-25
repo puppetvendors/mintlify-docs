@@ -1,0 +1,76 @@
+---
+title: "Bulk Update Line Items"
+description: "Update multiple line items in a single request"
+api: "PATCH /v2/lineitems/bulk"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update multiple line items in a single batch operation. Both merchant and vendor tokens are accepted. A maximum of 100 line item updates can be submitted per request. Each update is processed independently, so partial success is possible.
+
+### Use Cases
+
+- **Reassign line items** to a different vendor in bulk
+- **Exclude line items** from payout calculations
+- **Batch corrections** after order import or reconciliation
+
+## Request Body
+
+<ParamField body="updates" type="array" required>
+  Array of line item update objects (max 100 items).
+
+  <Expandable title="Update object properties">
+    <ParamField body="lineItemId" type="string" required>
+      Line item ObjectId to update.
+    </ParamField>
+
+    <ParamField body="vendorId" type="string">
+      Reassign the line item to a different vendor ObjectId.
+    </ParamField>
+
+    <ParamField body="ignoreInPayout" type="boolean">
+      When `true`, excludes this line item from payout calculations.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "message": "Bulk update completed",
+    "successCount": 95,
+    "failedCount": 5
+  }
+}
+```
+
+### Error Response
+
+```json 400
+{
+  "success": false,
+  "error": "Validation failed: updates array exceeds maximum of 100 items"
+}
+```
+
+## Example
+
+```bash
+curl -X PATCH https://api.puppetvendors.com/v2/lineitems/bulk \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "updates": [
+      { "lineItemId": "507f1f77bcf86cd799439020", "vendorId": "507f1f77bcf86cd799439011" },
+      { "lineItemId": "507f1f77bcf86cd799439021", "ignoreInPayout": true },
+      { "lineItemId": "507f1f77bcf86cd799439022", "vendorId": "507f1f77bcf86cd799439012", "ignoreInPayout": false }
+    ]
+  }'
+```

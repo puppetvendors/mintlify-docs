@@ -1,0 +1,45 @@
+---
+title: "Update Shippo Integration"
+description: "Configure or update the vendor's Shippo integration"
+api: "PUT /v2/vendor/integrations/shippo"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Set or update the Shippo API key for shipping label generation and tracking.
+
+## Request Body
+
+<ParamField body="apiKey" type="string" required>
+  Shippo API key.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "type": "shippo",
+      "connected": true,
+      "updatedAt": "2024-06-15T10:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT https://api.puppetvendors.com/v2/vendor/integrations/shippo \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "apiKey": "shippo_test_abc123def456"
+  }'
+```

@@ -1,0 +1,38 @@
+---
+title: "Get Stripe Integration"
+description: "Retrieve the vendor's Stripe Connect integration status"
+api: "GET /v2/vendor/integrations/stripe"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve the Stripe Connect integration status for the authenticated vendor. Shows whether the vendor has completed Stripe onboarding for payout processing.
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "type": "stripe",
+      "connected": true,
+      "accountId": "acct_1234567890",
+      "chargesEnabled": true,
+      "payoutsEnabled": true,
+      "updatedAt": "2024-04-15T12:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/integrations/stripe" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

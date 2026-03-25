@@ -1,0 +1,67 @@
+---
+title: "Vendor Portal API"
+description: "Self-service API endpoints for vendor-scoped operations"
+---
+
+<Note>
+  **V2 Alpha** — The Vendor Portal API is part of the V2 preview.
+</Note>
+
+## Overview
+
+The Vendor Portal API provides a dedicated set of endpoints (`/v2/vendor/*`) for vendor self-service operations. These endpoints require a **vendor-scoped JWT token** obtained via `POST /v2/authenticate` with vendor credentials.
+
+Vendor tokens are automatically scoped to the authenticated vendor's data — no `vendorId` parameter is needed.
+
+## Authentication
+
+Vendor tokens are obtained by authenticating with vendor credentials:
+
+```bash
+curl -X POST "https://api.puppetvendors.com/v2/authenticate" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "vendor@example.com", "password": "your-password", "shopId": "YOUR_SHOP_ID"}'
+```
+
+The returned JWT token includes the vendor scope and should be passed in the `x-access-token` header.
+
+## Available Endpoints
+
+<CardGroup cols={2}>
+  <Card title="Orders" icon="cart-shopping" href="/api-reference/v2/endpoint/vendor-list-orders">
+    View and export vendor-specific orders
+  </Card>
+  <Card title="Products" icon="box" href="/api-reference/v2/endpoint/vendor-list-products">
+    Create and manage vendor products
+  </Card>
+  <Card title="Fulfillments" icon="truck" href="/api-reference/v2/endpoint/vendor-list-fulfillments">
+    Create, update, and cancel fulfillments
+  </Card>
+  <Card title="Payouts" icon="money-bill-wave" href="/api-reference/v2/endpoint/vendor-list-payouts">
+    View payout transactions and details
+  </Card>
+  <Card title="Dashboard" icon="chart-line" href="/api-reference/v2/endpoint/vendor-get-dashboard">
+    Sales metrics, charts, and top products
+  </Card>
+  <Card title="Customers" icon="users" href="/api-reference/v2/endpoint/vendor-list-customers">
+    Customer directory from order data
+  </Card>
+  <Card title="Users" icon="user-plus" href="/api-reference/v2/endpoint/vendor-list-users">
+    Manage vendor portal user accounts
+  </Card>
+  <Card title="Profile" icon="id-card" href="/api-reference/v2/endpoint/vendor-get-profile">
+    Vendor profile and address management
+  </Card>
+  <Card title="Discounts" icon="tag" href="/api-reference/v2/endpoint/vendor-list-discounts">
+    Create and manage discount codes
+  </Card>
+  <Card title="Integrations" icon="plug" href="/api-reference/v2/endpoint/vendor-get-shippo">
+    Shipping and payment integrations
+  </Card>
+</CardGroup>
+
+## Scope Restrictions
+
+- Vendor tokens **cannot** access merchant-scoped endpoints (`/v2/vendors`, `/v2/commissions`, etc.)
+- Vendor tokens are **auto-scoped** — data is automatically filtered to the authenticated vendor
+- Merchant tokens **cannot** access vendor portal endpoints (`/v2/vendor/*`) — they receive 403

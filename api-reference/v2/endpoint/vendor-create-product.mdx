@@ -1,0 +1,154 @@
+---
+title: "Vendor Create Product"
+description: "Create a new product as a vendor with Shopify sync"
+api: "POST /v2/vendor/products/create"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Create a new product via Shopify's `productSet` mutation on behalf of the authenticated vendor. Includes variants, options, metafields, and media in a single synchronous call. Maximum 100 variants per product. The vendor ID is derived from the JWT token and does not need to be sent in the request body.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Vendor product submission** — Let vendors create products directly via API
+- **Automated product imports** — Import products from external catalogues
+- **Headless product management** — Build custom vendor product creation flows
+
+## Request Body
+
+<ParamField body="title" type="string" required>
+  Product title (max 255 characters).
+</ParamField>
+
+<ParamField body="descriptionHtml" type="string">
+  HTML product description.
+</ParamField>
+
+<ParamField body="productType" type="string">
+  Product type (max 255 characters).
+</ParamField>
+
+<ParamField body="status" type="string" default="DRAFT">
+  Initial product status. One of: `ACTIVE`, `DRAFT`, `ARCHIVED`.
+</ParamField>
+
+<ParamField body="handle" type="string">
+  URL handle (max 255 characters). Auto-generated from title if not provided.
+</ParamField>
+
+<ParamField body="tags" type="string[]">
+  Product tags (max 250 tags).
+</ParamField>
+
+<ParamField body="options" type="object[]">
+  Product options (max 3). Each option has `name` (string) and `values` (string array).
+</ParamField>
+
+<ParamField body="variants" type="object[]">
+  Product variants (max 100). Each variant can include:
+  - `optionValues` — Array of `{ name, value }` matching product options
+  - `price` — Decimal string (e.g. `"29.99"`)
+  - `sku` — SKU string
+  - `barcode` — Barcode string
+  - `inventoryQuantity` — Integer
+  - `weight` — Object with `value` (number) and optional `unit` (`POUNDS`, `OUNCES`, `KILOGRAMS`, `GRAMS`)
+</ParamField>
+
+<ParamField body="metafields" type="object[]">
+  Product metafields. Each has `namespace`, `key`, `value`, and optional `type`.
+</ParamField>
+
+<ParamField body="media" type="object[]">
+  Product media (max 250). Each has `originalSource` (URL), optional `mediaContentType` (`IMAGE`, `VIDEO`, `MODEL_3D`, `EXTERNAL_VIDEO`), and optional `alt`.
+</ParamField>
+
+<ParamField body="seo" type="object">
+  SEO settings with optional `title` (max 255) and `description` (max 320).
+</ParamField>
+
+<ParamField body="category" type="string">
+  Product category.
+</ParamField>
+
+<ParamField body="templateSuffix" type="string">
+  Shopify template suffix for this product.
+</ParamField>
+
+<ParamField body="published" type="boolean">
+  Whether the product should be published to the online store.
+</ParamField>
+
+## Response
+
+```json 201
+{
+  "success": true,
+  "data": {
+    "_id": "507f1f77bcf86cd799439035",
+    "title": "Widget Pro",
+    "handle": "widget-pro",
+    "status": "DRAFT",
+    "productId": 7654321098765,
+    "graphqlProductId": "gid://shopify/Product/7654321098765",
+    "createdAt": "2024-06-15T10:30:00.000Z"
+  }
+}
+```
+
+### Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": {
+    "message": "Title is required",
+    "code": "VALIDATION_ERROR"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/vendor/products/create \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "title": "Widget Pro",
+    "descriptionHtml": "<p>Premium widget for all occasions</p>",
+    "status": "DRAFT",
+    "options": [
+      { "name": "Size", "values": ["Small", "Medium", "Large"] }
+    ],
+    "variants": [
+      {
+        "optionValues": [{ "name": "Size", "value": "Small" }],
+        "price": "19.99",
+        "sku": "WP-SM"
+      },
+      {
+        "optionValues": [{ "name": "Size", "value": "Medium" }],
+        "price": "24.99",
+        "sku": "WP-MD"
+      },
+      {
+        "optionValues": [{ "name": "Size", "value": "Large" }],
+        "price": "29.99",
+        "sku": "WP-LG"
+      }
+    ],
+    "tags": ["widget", "premium"],
+    "seo": {
+      "title": "Widget Pro - Premium Widget",
+      "description": "The best widget for your needs"
+    }
+  }'
+```

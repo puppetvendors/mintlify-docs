@@ -1,0 +1,93 @@
+---
+title: "List Vendor Customers"
+description: "Retrieve a paginated customer directory from vendor order data"
+api: "GET /v2/vendor/customers"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of unique customers derived from the authenticated vendor's order data. Each customer record includes contact information, order count, total spent, and the date of their last order.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Build a vendor CRM** showing customer purchase history
+- **Identify high-value customers** by total spend or order frequency
+
+## Query Parameters
+
+<ParamField query="createdAtMin" type="string">
+  Filter by first order date (minimum, ISO 8601).
+</ParamField>
+
+<ParamField query="createdAtMax" type="string">
+  Filter by first order date (maximum, ISO 8601).
+</ParamField>
+
+<ParamField query="locationId" type="string">
+  Filter by Shopify location ID.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search in customer email, first name, or last name.
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1-100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1-100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "edges": [
+      {
+        "node": {
+          "email": "jane.doe@example.com",
+          "firstName": "Jane",
+          "lastName": "Doe",
+          "phone": "+1-555-123-4567",
+          "orderCount": 5,
+          "totalSpent": 849.95,
+          "lastOrderDate": "2024-06-10T14:30:00.000Z"
+        },
+        "cursor": "eyJpZCI6IjY2NjU3ZjFhYmNkZWYwMTIzNDU2Nzg5MCJ9"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjY2NjU3ZjFhYmNkZWYwMTIzNDU2Nzg5MCJ9",
+      "endCursor": "eyJpZCI6IjY2NjU3ZjFhYmNkZWYwMTIzNDU2Nzg5OSJ9"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/customers?search=jane&first=20" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

@@ -1,0 +1,55 @@
+---
+title: "Get Vendor Address"
+description: "Retrieve the business address for the authenticated vendor"
+api: "GET /v2/vendor/address"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve the business address for the authenticated vendor. No parameters are needed as the vendor is automatically determined from the JWT token.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Display vendor address** on a settings page
+- **Pre-fill shipping origin** for fulfillment workflows
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "address1": "123 Business Park",
+    "address2": "Unit 4B",
+    "city": "London",
+    "state": "England",
+    "country": "United Kingdom",
+    "zip": "EC1A 1BB",
+    "phone": "+44-20-7946-0958"
+  }
+}
+```
+
+### Error Responses
+
+```json 404
+{
+  "success": false,
+  "error": "Vendor not found or no address"
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/address" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

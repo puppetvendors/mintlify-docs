@@ -1,0 +1,63 @@
+---
+title: "Get Vendor Address"
+description: "Retrieve a vendor's address information"
+api: "GET /v2/vendors/{vendorId}/address"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve the stored address for a specific vendor. The address is used for shipping origin calculations, payout documentation, and vendor correspondence.
+
+### Use Cases
+
+- **Shipping configuration** — Display the vendor's return or origin address
+- **Payout documentation** — Include vendor address on invoices and remittances
+- **Vendor directory** — Show vendor locations in a marketplace directory
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's MongoDB ObjectId.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "address": {
+      "address1": "123 High Street",
+      "address2": "Suite 4B",
+      "city": "London",
+      "state": "England",
+      "country": "United Kingdom",
+      "zip": "SW1A 1AA",
+      "phone": "+44 20 7946 0958"
+    }
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Vendor not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET https://api.puppetvendors.com/v2/vendors/507f1f77bcf86cd799439011/address \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

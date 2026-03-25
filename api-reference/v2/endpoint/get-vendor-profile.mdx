@@ -1,0 +1,61 @@
+---
+title: "Get Vendor Profile"
+description: "Retrieve a vendor's custom profile fields"
+api: "GET /v2/vendors/{vendorId}/profile"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve the custom profile fields for a specific vendor. Profile fields are merchant-defined key-value pairs that store additional vendor information such as company registration numbers, tax IDs, or website URLs.
+
+### Use Cases
+
+- **Vendor detail pages** — Display custom profile information in dashboards
+- **Compliance checks** — Retrieve vendor registration or tax details
+- **Data export** — Pull vendor profile data into external systems
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's MongoDB ObjectId.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "profile": {
+      "fields": [
+        { "field": "Company Registration", "value": "12345678" },
+        { "field": "Website", "value": "https://acmesupplies.com" },
+        { "field": "Tax ID", "value": "GB123456789" }
+      ]
+    }
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Vendor not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET https://api.puppetvendors.com/v2/vendors/507f1f77bcf86cd799439011/profile \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

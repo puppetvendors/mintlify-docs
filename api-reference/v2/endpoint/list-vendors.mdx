@@ -1,0 +1,86 @@
+---
+title: "List Vendors"
+description: "Retrieve vendors with cursor-based pagination and filters"
+api: "GET /v2/vendors"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of vendors for the authenticated merchant's shop. Supports filtering by name, visibility, and commission type with cursor-based pagination.
+
+### Use Cases
+
+- **Vendor directory** — Display all vendors in a custom dashboard
+- **Commission auditing** — Filter vendors by commission type for reporting
+- **Active vendor management** — Find hidden or active vendors
+
+## Query Parameters
+
+<ParamField query="search" type="string">
+  Search by vendor name or alias (max 200 characters).
+</ParamField>
+
+<ParamField query="isHidden" type="boolean">
+  Filter by visibility. `true` returns hidden (soft-deleted) vendors, `false` returns active vendors.
+</ParamField>
+
+<ParamField query="commissionType" type="string">
+  Filter by commission type. One of: `percentage`, `flat`.
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1-100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1-100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "vendors": [
+      {
+        "_id": "507f1f77bcf86cd799439011",
+        "vendorName": "Acme Supplies",
+        "vendorNameAlias": "acme-supplies",
+        "commissionType": "percentage",
+        "commissionAmount": 14,
+        "reportingEmail": "reports@acmesupplies.com",
+        "isHidden": false,
+        "createdAt": "2024-03-10T08:00:00.000Z",
+        "updatedAt": "2024-06-15T10:30:00.000Z"
+      }
+    ],
+    "totalCount": 42,
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAyMCJ9"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendors?first=20&commissionType=percentage" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

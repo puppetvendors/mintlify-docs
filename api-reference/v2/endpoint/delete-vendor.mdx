@@ -1,0 +1,55 @@
+---
+title: "Delete Vendor"
+description: "Soft-delete a vendor by hiding them from the marketplace"
+api: "DELETE /v2/vendors/{vendorId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Soft-delete a vendor by setting `isHidden` to `true`. The vendor's data is preserved and can be restored by updating `isHidden` back to `false` via the Update Vendor endpoint. Associated products and order history remain intact.
+
+### Use Cases
+
+- **Vendor offboarding** — Remove a vendor from the active marketplace without losing data
+- **Temporary suspension** — Hide a vendor while resolving issues
+- **Cleanup automation** — Programmatically deactivate inactive vendors
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's MongoDB ObjectId.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "deleted": true
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Vendor not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X DELETE https://api.puppetvendors.com/v2/vendors/507f1f77bcf86cd799439011 \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

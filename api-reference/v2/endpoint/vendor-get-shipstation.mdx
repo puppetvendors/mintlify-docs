@@ -1,0 +1,36 @@
+---
+title: "Get ShipStation Integration"
+description: "Retrieve the vendor's ShipStation integration"
+api: "GET /v2/vendor/integrations/shipstation"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve the ShipStation integration configuration. API credentials are returned masked.
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "type": "shipstation",
+      "connected": true,
+      "apiKey": "****...****xyz9",
+      "updatedAt": "2024-05-01T08:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/integrations/shipstation" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

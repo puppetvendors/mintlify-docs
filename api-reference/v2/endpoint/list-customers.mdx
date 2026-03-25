@@ -1,0 +1,106 @@
+---
+title: "List Customers"
+description: "Retrieve customers with cursor-based pagination and filters"
+api: "GET /v2/customers"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of customers who have placed orders. Both merchant and vendor tokens are accepted. Vendor tokens are automatically scoped to customers who have purchased the authenticated vendor's products. Merchant tokens can optionally filter by vendor using the `vendorId` parameter.
+
+### Use Cases
+
+- **Build customer directories** for vendor self-service portals
+- **Analyze customer segments** by order activity and spend
+- **Export customer data** for CRM synchronization
+
+## Query Parameters
+
+<ParamField query="vendorId" type="string">
+  Filter by vendor ObjectId. Merchant tokens only. Vendor tokens are auto-scoped and cannot override this.
+</ParamField>
+
+<ParamField query="createdAtMin" type="string">
+  Filter by customer creation date (minimum, ISO 8601).
+</ParamField>
+
+<ParamField query="createdAtMax" type="string">
+  Filter by customer creation date (maximum, ISO 8601).
+</ParamField>
+
+<ParamField query="locationId" type="string">
+  Filter by Shopify location ID.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search in customer name, email, or phone (max 200 characters).
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1–100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1–100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "edges": [
+      {
+        "node": {
+          "email": "jane.doe@example.com",
+          "firstName": "Jane",
+          "lastName": "Doe",
+          "phone": "+44 7700 900000",
+          "orderCount": 8,
+          "totalSpent": 1245.50,
+          "lastOrderDate": "2024-06-15T10:30:00.000Z"
+        },
+        "cursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9"
+      },
+      {
+        "node": {
+          "email": "john.smith@example.com",
+          "firstName": "John",
+          "lastName": "Smith",
+          "phone": null,
+          "orderCount": 3,
+          "totalSpent": 459.97,
+          "lastOrderDate": "2024-05-22T14:15:00.000Z"
+        },
+        "cursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMiJ9"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMiJ9"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/customers?search=jane&first=20" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

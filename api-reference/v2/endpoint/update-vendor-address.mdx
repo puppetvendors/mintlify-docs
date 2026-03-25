@@ -1,0 +1,113 @@
+---
+title: "Update Vendor Address"
+description: "Update a vendor's address information"
+api: "PUT /v2/vendors/{vendorId}/address"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update the address for a specific vendor. All fields are optional; only provided fields will be updated. The address is used for shipping origin calculations, payout documentation, and vendor correspondence.
+
+### Use Cases
+
+- **Vendor onboarding** — Set the vendor's address during initial setup
+- **Address changes** — Update address when a vendor relocates
+- **Integration sync** — Push address updates from external systems
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's MongoDB ObjectId.
+</ParamField>
+
+## Request Body
+
+<ParamField body="address1" type="string">
+  Primary address line (max 500 characters).
+</ParamField>
+
+<ParamField body="address2" type="string">
+  Secondary address line (max 500 characters).
+</ParamField>
+
+<ParamField body="city" type="string">
+  City name (max 200 characters).
+</ParamField>
+
+<ParamField body="state" type="string">
+  State or province (max 200 characters).
+</ParamField>
+
+<ParamField body="country" type="string">
+  Country name (max 200 characters).
+</ParamField>
+
+<ParamField body="zip" type="string">
+  Postal or ZIP code (max 50 characters).
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Phone number (max 50 characters).
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "address": {
+      "address1": "456 New Road",
+      "address2": "Floor 2",
+      "city": "Manchester",
+      "state": "England",
+      "country": "United Kingdom",
+      "zip": "M1 1AA",
+      "phone": "+44 161 234 5678"
+    }
+  }
+}
+```
+
+### Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": {
+    "message": "address1 must not exceed 500 characters",
+    "code": "VALIDATION_ERROR"
+  }
+}
+```
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Vendor not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT https://api.puppetvendors.com/v2/vendors/507f1f77bcf86cd799439011/address \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "address1": "456 New Road",
+    "address2": "Floor 2",
+    "city": "Manchester",
+    "state": "England",
+    "country": "United Kingdom",
+    "zip": "M1 1AA",
+    "phone": "+44 161 234 5678"
+  }'
+```

@@ -1,0 +1,103 @@
+---
+title: "Create Vendor"
+description: "Create a new vendor in the marketplace"
+api: "POST /v2/vendors"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Create a new vendor for the authenticated merchant's shop. The vendor name must be unique within the shop. An optional alias, commission configuration, and profile can be set during creation.
+
+### Use Cases
+
+- **Vendor onboarding** — Programmatically create vendor accounts from external systems
+- **Bulk vendor setup** — Automate vendor creation during marketplace launches
+- **Integration sync** — Mirror vendor records from an ERP or CRM
+
+## Request Body
+
+<ParamField body="vendorName" type="string" required>
+  Vendor display name (1-200 characters). Must be unique within the shop.
+</ParamField>
+
+<ParamField body="vendorNameAlias" type="string">
+  URL-friendly alias (max 200 characters). Must be unique within the shop if provided.
+</ParamField>
+
+<ParamField body="commissionType" type="string" default="percentage">
+  Commission type. One of: `percentage`, `flat`.
+</ParamField>
+
+<ParamField body="commissionAmount" type="number" default="10">
+  Commission amount (minimum 0). Interpreted as a percentage or flat amount depending on `commissionType`.
+</ParamField>
+
+<ParamField body="reportingEmail" type="string">
+  Email address for vendor reports and notifications. Must be a valid email format.
+</ParamField>
+
+<ParamField body="profile" type="object">
+  Optional vendor profile with custom fields. Contains a `fields` array of `{ field, value }` objects.
+</ParamField>
+
+## Response
+
+```json 201
+{
+  "success": true,
+  "data": {
+    "vendor": {
+      "_id": "507f1f77bcf86cd799439011",
+      "vendorName": "Acme Supplies",
+      "vendorNameAlias": "acme-supplies",
+      "commissionType": "percentage",
+      "commissionAmount": 14,
+      "reportingEmail": "reports@acmesupplies.com",
+      "isHidden": false,
+      "createdAt": "2024-06-15T10:30:00.000Z",
+      "updatedAt": "2024-06-15T10:30:00.000Z"
+    }
+  }
+}
+```
+
+### Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": {
+    "message": "Vendor name is required",
+    "code": "VALIDATION_ERROR"
+  }
+}
+```
+
+```json 409
+{
+  "success": false,
+  "error": {
+    "message": "A vendor with this name or alias already exists",
+    "code": "CONFLICT"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/vendors \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "vendorName": "Acme Supplies",
+    "vendorNameAlias": "acme-supplies",
+    "commissionType": "percentage",
+    "commissionAmount": 14,
+    "reportingEmail": "reports@acmesupplies.com"
+  }'
+```

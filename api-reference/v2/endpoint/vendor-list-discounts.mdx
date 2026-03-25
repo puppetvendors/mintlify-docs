@@ -1,0 +1,82 @@
+---
+title: "List Vendor Discounts"
+description: "Retrieve vendor-scoped discount codes"
+api: "GET /v2/vendor/discounts"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve discount codes created by or assigned to the authenticated vendor.
+
+### Use Cases
+
+- **Manage promotions** in a vendor self-service portal
+- **Monitor discount usage** and effectiveness
+
+## Query Parameters
+
+<ParamField query="status" type="string">
+  Filter by status. One of: `active`, `expired`, `disabled`.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search in discount title and code.
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Forward pagination count (1–100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Forward pagination cursor.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Backward pagination count (1–100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Backward pagination cursor.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "edges": [
+      {
+        "node": {
+          "_id": "507f1f77bcf86cd799439011",
+          "code": "VENDOR20",
+          "title": "Vendor Special 20% Off",
+          "status": "active",
+          "startsAt": "2024-06-01T00:00:00.000Z",
+          "endsAt": "2024-08-31T23:59:59.000Z",
+          "usageCount": 12,
+          "usageLimit": 50
+        },
+        "cursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/discounts?status=active&first=20" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

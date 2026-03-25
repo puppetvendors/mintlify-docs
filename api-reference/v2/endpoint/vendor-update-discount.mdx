@@ -1,0 +1,62 @@
+---
+title: "Update Vendor Discount"
+description: "Update an existing vendor discount code"
+api: "PUT /v2/vendor/discounts/{discountId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update an existing discount code owned by the authenticated vendor.
+
+## Path Parameters
+
+<ParamField path="discountId" type="string" required>
+  Discount ObjectId.
+</ParamField>
+
+## Request Body
+
+<ParamField body="title" type="string">
+  Updated title.
+</ParamField>
+
+<ParamField body="endsAt" type="string">
+  Updated end date (ISO 8601).
+</ParamField>
+
+<ParamField body="status" type="string">
+  Updated status. One of: `active`, `expired`, `disabled`.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "discount": {
+      "_id": "507f1f77bcf86cd799439011",
+      "code": "VENDOR20",
+      "title": "Extended Vendor Sale",
+      "status": "active",
+      "updatedAt": "2024-08-01T09:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT https://api.puppetvendors.com/v2/vendor/discounts/507f1f77bcf86cd799439011 \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "title": "Extended Vendor Sale",
+    "endsAt": "2024-09-30T23:59:59.000Z"
+  }'
+```

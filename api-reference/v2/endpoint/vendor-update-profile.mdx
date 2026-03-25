@@ -1,0 +1,90 @@
+---
+title: "Update Vendor Profile"
+description: "Update profile fields for the authenticated vendor"
+api: "PUT /v2/vendor/profile"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update the custom profile fields for the authenticated vendor. Send an array of field-value pairs to update. Fields must match the shop's configured profile fields. Between 1 and 50 fields can be updated per request.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Allow vendors to edit their own profile** from a self-service portal
+- **Sync vendor data** from an external system
+
+## Request Body
+
+<ParamField body="fields" type="array" required>
+  Array of field-value pairs to update (1-50 items).
+
+  <Expandable title="field item properties">
+    <ParamField body="fields[].field" type="string" required>
+      The profile field name (must match a configured shop profile field).
+    </ParamField>
+
+    <ParamField body="fields[].value" type="any" required>
+      The value to set for the field.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "companyName": "Acme Supplies Ltd",
+    "contactPerson": "Jane Smith",
+    "website": "https://acme-supplies.com",
+    "taxId": "GB123456789",
+    "description": "Updated description for Acme Supplies"
+  }
+}
+```
+
+### Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": "Validation failed",
+  "details": [
+    {
+      "path": ["fields"],
+      "message": "At least one field is required"
+    }
+  ]
+}
+```
+
+```json 404
+{
+  "success": false,
+  "error": "Vendor not found"
+}
+```
+
+## Example
+
+```bash
+curl -X PUT "https://api.puppetvendors.com/v2/vendor/profile" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "fields": [
+      { "field": "companyName", "value": "Acme Supplies Ltd" },
+      { "field": "website", "value": "https://acme-supplies.com" },
+      { "field": "description", "value": "Updated description for Acme Supplies" }
+    ]
+  }'
+```

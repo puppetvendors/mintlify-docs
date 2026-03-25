@@ -1,0 +1,99 @@
+---
+title: "Vendor List Payouts"
+description: "Retrieve vendor-scoped payout transactions with cursor-based pagination"
+api: "GET /v2/vendor/payouts"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of payout transactions for the authenticated vendor. Results include transaction status, amounts, processing dates, and item counts. Only payouts belonging to the vendor are returned.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Payout dashboard** — Display pending and completed payouts in a vendor portal
+- **Accounting reconciliation** — Export payout data for bookkeeping
+- **Payment tracking** — Monitor payout statuses and amounts
+
+## Query Parameters
+
+<ParamField query="status" type="string">
+  Filter by payout status. One of: `pending`, `paid`, `failed`, `cancelled`.
+</ParamField>
+
+<ParamField query="dateMin" type="string">
+  Filter by date (minimum, ISO 8601). Example: `2024-01-01T00:00:00Z`.
+</ParamField>
+
+<ParamField query="dateMax" type="string">
+  Filter by date (maximum, ISO 8601).
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1-100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1-100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "transactions": [
+      {
+        "_id": "507f1f77bcf86cd799439050",
+        "transactionId": "TXN-2024-001042",
+        "status": "paid",
+        "amount": 1250.75,
+        "currency": "GBP",
+        "itemCount": 12,
+        "processedAt": "2024-06-20T14:00:00.000Z",
+        "createdAt": "2024-06-15T10:30:00.000Z"
+      },
+      {
+        "_id": "507f1f77bcf86cd799439051",
+        "transactionId": "TXN-2024-001038",
+        "status": "pending",
+        "amount": 840.50,
+        "currency": "GBP",
+        "itemCount": 8,
+        "processedAt": null,
+        "createdAt": "2024-06-18T09:15:00.000Z"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": true,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTA1MCJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTA1MSJ9",
+      "totalCount": 25
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/payouts?status=pending&first=20" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

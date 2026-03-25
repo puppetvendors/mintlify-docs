@@ -1,0 +1,88 @@
+---
+title: "Vendor Get Order"
+description: "Retrieve a single order with vendor-scoped line items"
+api: "GET /v2/vendor/orders/{orderId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve detailed information for a single order, scoped to the authenticated vendor. The response includes only line items belonging to the vendor and indicates vendor scoping via the `isVendorScoped` flag. The `orderId` parameter accepts either a MongoDB ObjectId or a numeric Shopify order ID.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Order detail view** — Display full order breakdown in a vendor portal
+- **Payout reconciliation** — Check vendor earnings for a specific order
+- **Fulfillment planning** — See which vendor line items need fulfillment
+
+## Path Parameters
+
+<ParamField path="orderId" type="string" required>
+  The order's MongoDB ObjectId or numeric Shopify order ID.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "order": {
+      "_id": "507f1f77bcf86cd799439013",
+      "orderId": 5123456789,
+      "orderNumber": 1042,
+      "orderName": "#1042",
+      "customer": {
+        "email": "customer@example.com",
+        "firstName": "Jane",
+        "lastName": "Doe"
+      },
+      "shippingAddress": {
+        "address1": "123 High Street",
+        "city": "London",
+        "province": "England",
+        "country": "United Kingdom",
+        "zip": "SW1A 1AA"
+      },
+      "status": "fulfilled",
+      "createdAt": "2024-06-15T10:30:00.000Z"
+    },
+    "lineItems": [
+      {
+        "_id": "507f1f77bcf86cd799439015",
+        "lineItemName": "Widget Pro - Large / Blue",
+        "quantity": 2,
+        "unitPrice": 139.99,
+        "fulfillmentStatus": "fulfilled"
+      }
+    ],
+    "isVendorScoped": true
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Order not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/orders/507f1f77bcf86cd799439013" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

@@ -1,0 +1,108 @@
+---
+title: "Update Vendor Address"
+description: "Update the business address for the authenticated vendor"
+api: "PUT /v2/vendor/address"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update the business address for the authenticated vendor. All fields are optional -- only fields included in the request body are updated.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Allow vendors to update their address** from a self-service portal
+- **Sync address changes** from an external system
+
+## Request Body
+
+<ParamField body="address1" type="string">
+  Address line 1 (max 500 characters).
+</ParamField>
+
+<ParamField body="address2" type="string">
+  Address line 2 (max 500 characters).
+</ParamField>
+
+<ParamField body="city" type="string">
+  City name (max 200 characters).
+</ParamField>
+
+<ParamField body="state" type="string">
+  State or province (max 200 characters).
+</ParamField>
+
+<ParamField body="country" type="string">
+  Country name (max 200 characters).
+</ParamField>
+
+<ParamField body="zip" type="string">
+  Postal / ZIP code (max 50 characters).
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Phone number (max 50 characters).
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "address1": "456 New Street",
+    "address2": "Suite 10",
+    "city": "Manchester",
+    "state": "England",
+    "country": "United Kingdom",
+    "zip": "M1 1AA",
+    "phone": "+44-161-123-4567"
+  }
+}
+```
+
+### Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": "Validation failed",
+  "details": [
+    {
+      "path": ["address1"],
+      "message": "String must contain at most 500 character(s)"
+    }
+  ]
+}
+```
+
+```json 404
+{
+  "success": false,
+  "error": "Vendor not found"
+}
+```
+
+## Example
+
+```bash
+curl -X PUT "https://api.puppetvendors.com/v2/vendor/address" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "address1": "456 New Street",
+    "address2": "Suite 10",
+    "city": "Manchester",
+    "state": "England",
+    "country": "United Kingdom",
+    "zip": "M1 1AA",
+    "phone": "+44-161-123-4567"
+  }'
+```

@@ -1,0 +1,75 @@
+---
+title: "Bulk Upload SKU Commissions"
+description: "Create or update SKU-level commission overrides in bulk"
+api: "POST /v2/commissions/sku"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Create or update SKU-level commission overrides in a single request. Existing SKU commissions are upserted (matched by SKU). Both merchant and vendor tokens are accepted. A maximum of 500 commission entries can be submitted per request.
+
+### Use Cases
+
+- **Bulk import** commission overrides from a spreadsheet or ERP
+- **Automate rate adjustments** across product lines
+- **Sync external commission rules** into PuppetVendors
+
+## Request Body
+
+<ParamField body="commissions" type="array" required>
+  Array of SKU commission objects (max 500 items).
+
+  <Expandable title="Commission object properties">
+    <ParamField body="sku" type="string" required>
+      Product variant SKU.
+    </ParamField>
+
+    <ParamField body="rate" type="number" required>
+      Commission rate value.
+    </ParamField>
+
+    <ParamField body="type" type="string" required>
+      Commission type. One of: `percentage`, `flat`.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "message": "SKU commissions uploaded successfully",
+    "upsertedCount": 3
+  }
+}
+```
+
+### Error Response
+
+```json 400
+{
+  "success": false,
+  "error": "Validation failed: commissions array exceeds maximum of 500 items"
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/commissions/sku \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "commissions": [
+      { "sku": "WP-LG-BL", "rate": 10, "type": "percentage" },
+      { "sku": "WP-SM-RD", "rate": 3.50, "type": "flat" },
+      { "sku": "WP-MD-GN", "rate": 12, "type": "percentage" }
+    ]
+  }'
+```

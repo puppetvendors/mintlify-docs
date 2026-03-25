@@ -1,0 +1,37 @@
+---
+title: "Delete Vendor Discount"
+description: "Delete a vendor discount code"
+api: "DELETE /v2/vendor/discounts/{discountId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Permanently delete a discount code owned by the authenticated vendor.
+
+## Path Parameters
+
+<ParamField path="discountId" type="string" required>
+  Discount ObjectId.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "deleted": true
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X DELETE https://api.puppetvendors.com/v2/vendor/discounts/507f1f77bcf86cd799439011 \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

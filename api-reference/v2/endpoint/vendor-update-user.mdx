@@ -1,0 +1,121 @@
+---
+title: "Update Vendor User"
+description: "Update an existing user account belonging to the vendor"
+api: "PUT /v2/vendor/users/{userId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update an existing user account belonging to the authenticated vendor. Only fields included in the request body are updated. Returns 404 if the user does not belong to the vendor.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Update team member permissions** or approval status
+- **Reset a user's password** from the vendor portal
+
+## Path Parameters
+
+<ParamField path="userId" type="string" required>
+  The user ObjectId to update.
+</ParamField>
+
+## Request Body
+
+<ParamField body="email" type="string">
+  Updated email address. Must be a valid email format.
+</ParamField>
+
+<ParamField body="password" type="string">
+  Updated password (minimum 6 characters).
+</ParamField>
+
+<ParamField body="approved" type="boolean">
+  Whether the account is active.
+</ParamField>
+
+<ParamField body="notifications" type="boolean">
+  Enable or disable email notifications.
+</ParamField>
+
+<ParamField body="profile" type="object">
+  Updated profile information.
+
+  <Expandable title="profile properties">
+    <ParamField body="profile.firstName" type="string">
+      First name (max 100 characters).
+    </ParamField>
+
+    <ParamField body="profile.lastName" type="string">
+      Last name (max 100 characters).
+    </ParamField>
+
+    <ParamField body="profile.phone" type="string">
+      Phone number (max 50 characters).
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="permission" type="object">
+  Updated permission configuration object.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "_id": "507f1f77bcf86cd799439022",
+    "email": "updated@vendor.com",
+    "type": "vendor",
+    "approved": true,
+    "profile": {
+      "firstName": "Updated",
+      "lastName": "User"
+    },
+    "notifications": true,
+    "permission": {},
+    "createdAt": "2024-06-15T12:00:00.000Z",
+    "updatedAt": "2024-06-16T10:00:00.000Z"
+  }
+}
+```
+
+### Error Responses
+
+```json 404
+{
+  "success": false,
+  "error": "User not found"
+}
+```
+
+```json 409
+{
+  "success": false,
+  "error": "A user with this email already exists"
+}
+```
+
+## Example
+
+```bash
+curl -X PUT "https://api.puppetvendors.com/v2/vendor/users/507f1f77bcf86cd799439022" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "approved": true,
+    "profile": {
+      "firstName": "Updated",
+      "lastName": "User"
+    }
+  }'
+```

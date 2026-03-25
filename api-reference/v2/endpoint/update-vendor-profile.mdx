@@ -1,0 +1,86 @@
+---
+title: "Update Vendor Profile"
+description: "Update a vendor's custom profile fields"
+api: "PUT /v2/vendors/{vendorId}/profile"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Update custom profile fields for a specific vendor. Provide an array of field-value pairs to set or overwrite. Existing fields not included in the request are left unchanged. Accepts between 1 and 50 field updates per request.
+
+### Use Cases
+
+- **Vendor onboarding** — Set initial profile fields after vendor creation
+- **Profile updates** — Allow vendors or merchants to update custom fields
+- **Bulk field sync** — Push profile data from external CRM or ERP systems
+
+## Path Parameters
+
+<ParamField path="vendorId" type="string" required>
+  The vendor's MongoDB ObjectId.
+</ParamField>
+
+## Request Body
+
+<ParamField body="fields" type="object[]" required>
+  Array of field updates (1-50 items). Each object contains:
+  - `field` (string, required) — The field name
+  - `value` (any, required) — The field value
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "profile": {
+      "fields": [
+        { "field": "Company Registration", "value": "12345678" },
+        { "field": "Website", "value": "https://acmesupplies.com" },
+        { "field": "Tax ID", "value": "GB987654321" }
+      ]
+    }
+  }
+}
+```
+
+### Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": {
+    "message": "Fields array is required and must contain 1-50 items",
+    "code": "VALIDATION_ERROR"
+  }
+}
+```
+
+```json 404
+{
+  "success": false,
+  "error": {
+    "message": "Vendor not found",
+    "code": "NOT_FOUND"
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT https://api.puppetvendors.com/v2/vendors/507f1f77bcf86cd799439011/profile \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_JWT_TOKEN" \
+  -d '{
+    "fields": [
+      { "field": "Tax ID", "value": "GB987654321" },
+      { "field": "Website", "value": "https://acmesupplies.com" }
+    ]
+  }'
+```

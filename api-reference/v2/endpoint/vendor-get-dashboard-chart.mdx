@@ -1,0 +1,73 @@
+---
+title: "Get Dashboard Chart Data"
+description: "Retrieve time-series chart data for sales, refunds, and cancellations"
+api: "GET /v2/vendor/dashboard/chart"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve time-series chart data for the authenticated vendor, broken down by the specified granularity. Returns sales, refunds, and cancelled amounts per time bucket for rendering charts and graphs.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Render sales charts** on a vendor dashboard
+- **Visualize trends** in refunds and cancellations over time
+
+## Query Parameters
+
+<ParamField query="dateStart" type="string" required>
+  Filter by date (minimum, ISO 8601). Example: `2024-01-01T00:00:00Z`.
+</ParamField>
+
+<ParamField query="dateEnd" type="string" required>
+  Filter by date (maximum, ISO 8601). Example: `2024-06-30T23:59:59Z`.
+</ParamField>
+
+<ParamField query="granularity" type="string" default="day">
+  Time granularity for chart data. One of: `day`, `week`, `month`.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "chartData": [
+      {
+        "date": "2024-06-01",
+        "sales": 1250.00,
+        "refunds": 50.00,
+        "cancelled": 0
+      },
+      {
+        "date": "2024-06-02",
+        "sales": 890.50,
+        "refunds": 0,
+        "cancelled": 120.00
+      },
+      {
+        "date": "2024-06-03",
+        "sales": 1540.75,
+        "refunds": 75.00,
+        "cancelled": 0
+      }
+    ]
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/dashboard/chart?dateStart=2024-06-01T00:00:00Z&dateEnd=2024-06-30T23:59:59Z&granularity=day" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

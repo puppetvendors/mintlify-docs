@@ -1,0 +1,45 @@
+---
+title: "Update PayPal Integration"
+description: "Configure or update the vendor's PayPal integration"
+api: "PUT /v2/vendor/integrations/paypal"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Set or update the PayPal email address used for payout processing.
+
+## Request Body
+
+<ParamField body="email" type="string" required>
+  PayPal email address (must be valid email format).
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "type": "paypal",
+      "connected": true,
+      "updatedAt": "2024-06-15T10:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X PUT https://api.puppetvendors.com/v2/vendor/integrations/paypal \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "email": "vendor@premiumcrafts.com"
+  }'
+```

@@ -1,0 +1,52 @@
+---
+title: "Delete Discount"
+description: "Permanently delete a discount code"
+api: "DELETE /v2/discounts/{discountId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Permanently delete a discount code by its ID. Both merchant and vendor tokens are accepted. Vendor tokens can only delete discounts belonging to the authenticated vendor. This action is irreversible. Consider updating the discount status to `disabled` instead if you may need to reference it later.
+
+### Use Cases
+
+- **Remove unused discounts** to keep the list clean
+- **Clean up test discounts** after development
+- **Automated lifecycle management** for expired promotions
+
+## Path Parameters
+
+<ParamField path="discountId" type="string" required>
+  The ObjectId of the discount to delete.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "deleted": true
+  }
+}
+```
+
+### Error Response
+
+```json 404
+{
+  "success": false,
+  "error": "Discount not found"
+}
+```
+
+## Example
+
+```bash
+curl -X DELETE https://api.puppetvendors.com/v2/discounts/507f1f77bcf86cd799439030 \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```

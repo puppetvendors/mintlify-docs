@@ -1,0 +1,83 @@
+---
+title: "Create Vendor Discount"
+description: "Create a new discount code as a vendor"
+api: "POST /v2/vendor/discounts"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Create a new discount code for the authenticated vendor's products.
+
+### Use Cases
+
+- **Launch vendor-specific promotions**
+- **Automate discount creation** from marketing campaigns
+
+## Request Body
+
+<ParamField body="code" type="string" required>
+  Discount code for checkout.
+</ParamField>
+
+<ParamField body="title" type="string" required>
+  Internal title/description.
+</ParamField>
+
+<ParamField body="startsAt" type="string">
+  Start date (ISO 8601).
+</ParamField>
+
+<ParamField body="endsAt" type="string">
+  End date (ISO 8601).
+</ParamField>
+
+<ParamField body="customerGets" type="object">
+  Discount value configuration.
+</ParamField>
+
+<ParamField body="usageLimit" type="integer">
+  Maximum total uses.
+</ParamField>
+
+<ParamField body="appliesOncePerCustomer" type="boolean">
+  Limit to one use per customer.
+</ParamField>
+
+<ParamField body="items" type="object">
+  Item targeting configuration.
+</ParamField>
+
+## Response
+
+```json 201
+{
+  "success": true,
+  "data": {
+    "discount": {
+      "_id": "507f1f77bcf86cd799439011",
+      "code": "VENDOR20",
+      "title": "Vendor Special 20% Off",
+      "status": "active",
+      "createdAt": "2024-06-15T10:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X POST https://api.puppetvendors.com/v2/vendor/discounts \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "code": "VENDOR20",
+    "title": "Vendor Special 20% Off",
+    "usageLimit": 50,
+    "appliesOncePerCustomer": true
+  }'
+```

@@ -1,0 +1,53 @@
+---
+title: "Get Vendor Profile"
+description: "Retrieve profile fields for the authenticated vendor"
+api: "GET /v2/vendor/profile"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve the custom profile fields for the authenticated vendor. Profile fields are key-value pairs configured by the shop admin. No parameters are needed as the vendor is automatically determined from the JWT token.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Display vendor profile** in a self-service settings page
+- **Pre-fill forms** for vendor profile editing
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "companyName": "Acme Supplies Ltd",
+    "contactPerson": "Jane Smith",
+    "website": "https://acme-supplies.com",
+    "taxId": "GB123456789",
+    "description": "Premium wholesale supplier of office supplies"
+  }
+}
+```
+
+### Error Responses
+
+```json 404
+{
+  "success": false,
+  "error": "Vendor not found"
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/profile" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

@@ -1,0 +1,36 @@
+---
+title: "Get PayPal Integration"
+description: "Retrieve the vendor's PayPal integration"
+api: "GET /v2/vendor/integrations/paypal"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve the PayPal integration configuration for payout processing. Email is returned masked.
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "integration": {
+      "type": "paypal",
+      "connected": true,
+      "email": "v****r@premiumcrafts.com",
+      "updatedAt": "2024-05-01T08:00:00.000Z"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/integrations/paypal" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

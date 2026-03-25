@@ -1,0 +1,119 @@
+---
+title: "Create Vendor User"
+description: "Create a new user account for the vendor"
+api: "POST /v2/vendor/users"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Create a new user account for the authenticated vendor. The `vendorId` is automatically derived from the vendor token, and the user type is always set to `vendor`. Optionally send an invitation email to the new user.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Invite team members** to the vendor portal
+- **Automate account provisioning** for new vendor staff
+
+## Request Body
+
+<ParamField body="email" type="string" required>
+  Email address for the new user. Must be a valid email format.
+</ParamField>
+
+<ParamField body="password" type="string" required>
+  Password for the new user (minimum 6 characters).
+</ParamField>
+
+<ParamField body="vendor" type="string">
+  Vendor name label for the user.
+</ParamField>
+
+<ParamField body="approved" type="boolean" default="false">
+  Whether the account is immediately active.
+</ParamField>
+
+<ParamField body="notifications" type="boolean">
+  Enable email notifications for the user.
+</ParamField>
+
+<ParamField body="sendInvite" type="boolean" default="false">
+  Send an invitation email to the new user.
+</ParamField>
+
+<ParamField body="profile" type="object">
+  User profile information.
+
+  <Expandable title="profile properties">
+    <ParamField body="profile.firstName" type="string">
+      First name (max 100 characters).
+    </ParamField>
+
+    <ParamField body="profile.lastName" type="string">
+      Last name (max 100 characters).
+    </ParamField>
+
+    <ParamField body="profile.phone" type="string">
+      Phone number (max 50 characters).
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="permission" type="object">
+  Permission configuration object for granular access control.
+</ParamField>
+
+## Response
+
+```json 201
+{
+  "success": true,
+  "data": {
+    "_id": "507f1f77bcf86cd799439022",
+    "email": "newuser@vendor.com",
+    "type": "vendor",
+    "approved": false,
+    "profile": {
+      "firstName": "New",
+      "lastName": "User"
+    },
+    "notifications": true,
+    "permission": {},
+    "createdAt": "2024-06-15T12:00:00.000Z",
+    "updatedAt": "2024-06-15T12:00:00.000Z"
+  }
+}
+```
+
+### Error Responses
+
+```json 409
+{
+  "success": false,
+  "error": "A user with this email already exists"
+}
+```
+
+## Example
+
+```bash
+curl -X POST "https://api.puppetvendors.com/v2/vendor/users" \
+  -H "Content-Type: application/json" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN" \
+  -d '{
+    "email": "newuser@vendor.com",
+    "password": "securePass123",
+    "approved": true,
+    "sendInvite": true,
+    "profile": {
+      "firstName": "New",
+      "lastName": "User"
+    }
+  }'
+```

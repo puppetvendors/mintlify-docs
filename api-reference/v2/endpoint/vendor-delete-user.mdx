@@ -1,0 +1,55 @@
+---
+title: "Delete Vendor User"
+description: "Delete a user account belonging to the vendor"
+api: "DELETE /v2/vendor/users/{userId}"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Delete a user account belonging to the authenticated vendor. Returns 404 if the user does not exist or does not belong to the vendor.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Remove team members** who no longer need portal access
+- **Clean up inactive accounts** from the vendor user list
+
+## Path Parameters
+
+<ParamField path="userId" type="string" required>
+  The user ObjectId to delete.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "deleted": true
+  }
+}
+```
+
+### Error Responses
+
+```json 404
+{
+  "success": false,
+  "error": "User not found"
+}
+```
+
+## Example
+
+```bash
+curl -X DELETE "https://api.puppetvendors.com/v2/vendor/users/507f1f77bcf86cd799439022" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

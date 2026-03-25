@@ -1,0 +1,85 @@
+---
+title: "Get Vendor Dashboard"
+description: "Retrieve aggregated dashboard metrics for the authenticated vendor"
+api: "GET /v2/vendor/dashboard"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve aggregated dashboard metrics for the authenticated vendor including net sales, total orders, refunds, earnings, and fulfillment rates. When a `range` preset is provided, the response includes percent-change fields comparing the current period to the previous equivalent period.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Build vendor dashboards** with key sales and performance metrics
+- **Track period-over-period growth** using the `range` preset for automatic comparisons
+
+## Query Parameters
+
+<ParamField query="dateStart" type="string">
+  Filter by date (minimum, ISO 8601). Example: `2024-01-01T00:00:00Z`.
+</ParamField>
+
+<ParamField query="dateEnd" type="string">
+  Filter by date (maximum, ISO 8601). Example: `2024-06-30T23:59:59Z`.
+</ParamField>
+
+<ParamField query="range" type="string">
+  Date range preset. Auto-calculates `dateStart` and `dateEnd`, and includes percent-change fields in the response. One of: `7d`, `30d`, `3m`, `6m`, `1y`.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "netSales": 12450.00,
+    "totalOrders": 87,
+    "refunds": 320.50,
+    "earnings": 10582.50,
+    "totalRevenue": 14200.00,
+    "cancelledSales": 450.00,
+    "fulfillmentRate": 0.92,
+    "avgOrderValue": 143.10,
+    "netSalesChange": {
+      "current": 12450.00,
+      "previous": 10200.00,
+      "changePercent": 22.06
+    },
+    "totalOrdersChange": {
+      "current": 87,
+      "previous": 72,
+      "changePercent": 20.83
+    },
+    "refundsChange": {
+      "current": 320.50,
+      "previous": 480.00,
+      "changePercent": -33.23
+    },
+    "earningsChange": {
+      "current": 10582.50,
+      "previous": 8670.00,
+      "changePercent": 22.06
+    }
+  }
+}
+```
+
+<Note>
+  The `*Change` fields (`netSalesChange`, `totalOrdersChange`, `refundsChange`, `earningsChange`) are only included when a `range` preset is provided. A positive `changePercent` indicates growth; negative indicates decline.
+</Note>
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/dashboard?range=30d" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

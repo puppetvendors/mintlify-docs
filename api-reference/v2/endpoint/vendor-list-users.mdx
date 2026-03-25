@@ -1,0 +1,96 @@
+---
+title: "List Vendor Users"
+description: "Retrieve a paginated list of users belonging to the vendor"
+api: "GET /v2/vendor/users"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve a paginated list of user accounts belonging to the authenticated vendor. Results are automatically scoped to the vendor's own users. Supports filtering by user type, approval status, and text search.
+
+<Note>
+  **Vendor Token Required** — This endpoint requires a vendor-scoped JWT token. Merchant tokens will receive a 403 error.
+</Note>
+
+### Use Cases
+
+- **Manage team access** in a vendor self-service portal
+- **Audit active accounts** and invitation status
+
+## Query Parameters
+
+<ParamField query="type" type="string">
+  Filter by user type. One of: `vendor`, `merchant`, `admin`.
+</ParamField>
+
+<ParamField query="approved" type="boolean">
+  Filter by approval status.
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search in user email, first name, or last name (max 200 characters).
+</ParamField>
+
+<ParamField query="first" type="integer">
+  Number of items to return, forward pagination (1-100).
+</ParamField>
+
+<ParamField query="after" type="string">
+  Cursor for forward pagination.
+</ParamField>
+
+<ParamField query="last" type="integer">
+  Number of items to return, backward pagination (1-100).
+</ParamField>
+
+<ParamField query="before" type="string">
+  Cursor for backward pagination.
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "edges": [
+      {
+        "node": {
+          "_id": "507f1f77bcf86cd799439011",
+          "email": "team@vendor.com",
+          "type": "vendor",
+          "approved": true,
+          "profile": {
+            "firstName": "Alex",
+            "lastName": "Smith",
+            "phone": "+1-555-987-6543"
+          },
+          "notifications": true,
+          "permission": {},
+          "lastLoggedIn": "2024-06-14T09:00:00.000Z",
+          "createdAt": "2024-01-10T08:00:00.000Z",
+          "updatedAt": "2024-06-14T09:00:00.000Z"
+        },
+        "cursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9"
+      }
+    ],
+    "pageInfo": {
+      "hasNextPage": false,
+      "hasPreviousPage": false,
+      "startCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9",
+      "endCursor": "eyJpZCI6IjUwN2YxZjc3YmNmODZjZDc5OTQzOTAxMSJ9"
+    }
+  }
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/vendor/users?approved=true&first=20" \
+  -H "x-access-token: YOUR_VENDOR_JWT_TOKEN"
+```

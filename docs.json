@@ -121,6 +121,20 @@
             ]
           },
           {
+            "group": "Vendors",
+            "pages": [
+              "api-reference/v2/endpoint/list-vendors",
+              "api-reference/v2/endpoint/get-vendor",
+              "api-reference/v2/endpoint/create-vendor",
+              "api-reference/v2/endpoint/update-vendor",
+              "api-reference/v2/endpoint/delete-vendor",
+              "api-reference/v2/endpoint/get-vendor-profile",
+              "api-reference/v2/endpoint/update-vendor-profile",
+              "api-reference/v2/endpoint/get-vendor-address",
+              "api-reference/v2/endpoint/update-vendor-address"
+            ]
+          },
+          {
             "group": "Orders",
             "pages": [
               "api-reference/v2/endpoint/list-orders",
@@ -147,7 +161,43 @@
           {
             "group": "Payouts",
             "pages": [
-              "api-reference/v2/endpoint/list-payouts"
+              "api-reference/v2/endpoint/list-payouts",
+              "api-reference/v2/endpoint/get-payout-summary"
+            ]
+          },
+          {
+            "group": "Commissions",
+            "pages": [
+              "api-reference/v2/endpoint/list-vendor-commissions",
+              "api-reference/v2/endpoint/list-sku-commissions",
+              "api-reference/v2/endpoint/bulk-upload-sku-commissions"
+            ]
+          },
+          {
+            "group": "Dashboard",
+            "pages": [
+              "api-reference/v2/endpoint/get-dashboard"
+            ]
+          },
+          {
+            "group": "Customers",
+            "pages": [
+              "api-reference/v2/endpoint/list-customers"
+            ]
+          },
+          {
+            "group": "Discounts",
+            "pages": [
+              "api-reference/v2/endpoint/list-discounts",
+              "api-reference/v2/endpoint/create-discount",
+              "api-reference/v2/endpoint/update-discount",
+              "api-reference/v2/endpoint/delete-discount"
+            ]
+          },
+          {
+            "group": "Line Items",
+            "pages": [
+              "api-reference/v2/endpoint/bulk-update-lineitems"
             ]
           },
           {
@@ -155,6 +205,95 @@
             "pages": [
               "api-reference/v2/endpoint/get-vendor-report",
               "api-reference/v2/endpoint/get-vendor-report-summary"
+            ]
+          },
+          {
+            "group": "Vendor Portal",
+            "pages": [
+              "api-reference/v2/vendor-portal"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Orders",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-list-orders",
+              "api-reference/v2/endpoint/vendor-get-order"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Products",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-list-products",
+              "api-reference/v2/endpoint/vendor-create-product"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Fulfillments",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-list-fulfillments",
+              "api-reference/v2/endpoint/vendor-create-fulfillment",
+              "api-reference/v2/endpoint/vendor-update-fulfillment",
+              "api-reference/v2/endpoint/vendor-cancel-fulfillment"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Payouts",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-list-payouts",
+              "api-reference/v2/endpoint/vendor-get-payout"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Dashboard",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-get-dashboard",
+              "api-reference/v2/endpoint/vendor-get-dashboard-chart",
+              "api-reference/v2/endpoint/vendor-get-top-products"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Customers",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-list-customers"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Users",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-list-users",
+              "api-reference/v2/endpoint/vendor-create-user",
+              "api-reference/v2/endpoint/vendor-update-user",
+              "api-reference/v2/endpoint/vendor-delete-user"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Profile",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-get-profile",
+              "api-reference/v2/endpoint/vendor-update-profile",
+              "api-reference/v2/endpoint/vendor-get-address",
+              "api-reference/v2/endpoint/vendor-update-address"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Discounts",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-list-discounts",
+              "api-reference/v2/endpoint/vendor-create-discount",
+              "api-reference/v2/endpoint/vendor-update-discount",
+              "api-reference/v2/endpoint/vendor-delete-discount"
+            ]
+          },
+          {
+            "group": "Vendor Portal - Integrations",
+            "pages": [
+              "api-reference/v2/endpoint/vendor-get-shippo",
+              "api-reference/v2/endpoint/vendor-update-shippo",
+              "api-reference/v2/endpoint/vendor-get-shipstation",
+              "api-reference/v2/endpoint/vendor-update-shipstation",
+              "api-reference/v2/endpoint/vendor-get-paypal",
+              "api-reference/v2/endpoint/vendor-update-paypal",
+              "api-reference/v2/endpoint/vendor-get-stripe"
             ]
           }
         ]

@@ -1,0 +1,80 @@
+---
+title: "Get Payout Summary"
+description: "Retrieve an aggregated payout summary for a vendor"
+api: "GET /v2/payouts/summary"
+---
+
+<Note>
+  **V2 Alpha** — This endpoint is part of the V2 API preview. Breaking changes may occur.
+</Note>
+
+## Overview
+
+Retrieve an aggregated payout summary for a vendor, including total received, pending, and scheduled amounts along with previous and next payout details. Both merchant and vendor tokens are accepted. Vendor tokens are automatically scoped to the authenticated vendor. Merchant tokens must provide a `vendorId`.
+
+### Use Cases
+
+- **Payout dashboards** showing vendor earnings at a glance
+- **Financial forecasting** with next payout estimates
+- **Reconciliation** of received vs pending amounts
+
+## Query Parameters
+
+<ParamField query="vendorId" type="string" required>
+  Vendor ObjectId. Required for merchant tokens; auto-filled for vendor tokens.
+</ParamField>
+
+<ParamField query="dateMin" type="string">
+  Filter by date (minimum, ISO 8601).
+</ParamField>
+
+<ParamField query="dateMax" type="string">
+  Filter by date (maximum, ISO 8601).
+</ParamField>
+
+## Response
+
+```json 200
+{
+  "success": true,
+  "data": {
+    "totalReceived": 12450.00,
+    "totalPending": 3200.50,
+    "totalScheduled": 1500.00,
+    "previousPayout": {
+      "amount": 2400.00,
+      "status": "paid",
+      "date": "2024-06-01T00:00:00.000Z"
+    },
+    "nextPayout": {
+      "amount": 1500.00,
+      "status": "scheduled",
+      "estimatedDate": "2024-07-01T00:00:00.000Z"
+    },
+    "itemCount": 245
+  }
+}
+```
+
+### Error Responses
+
+```json 400
+{
+  "success": false,
+  "error": "vendorId is required for merchant tokens"
+}
+```
+
+```json 403
+{
+  "success": false,
+  "error": "Forbidden: vendor tokens cannot query other vendors"
+}
+```
+
+## Example
+
+```bash
+curl -X GET "https://api.puppetvendors.com/v2/payouts/summary?vendorId=507f1f77bcf86cd799439011&dateMin=2024-01-01T00:00:00Z" \
+  -H "x-access-token: YOUR_JWT_TOKEN"
+```
